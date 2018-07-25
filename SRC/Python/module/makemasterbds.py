@@ -1541,11 +1541,10 @@ goal( [ '{}' ] )
                 local_resource = ''
                 if args.system_type == 'cluster':
                     pbs_ppn = min([project_cfg['pipeline']['software'][caller]['threads'], args.threads])
-                    local_resource = ', cpus := {}, mem := {}*G, timeout := {}*hour, taskName := "{}.{}.{}.{}"'.format(
+                    local_resource = ', cpus := {}, mem := {}*G, timeout := {}*hour, taskName := "lociStat.{}.{}.{}"'.format(
                         pbs_ppn,
                         pbs_ppn * 8,
                         72,
-                        caller,
                         quantifier,
                         aligner,
                         project_cfg['project']['name']
@@ -1564,7 +1563,7 @@ goal( [ '{}' ] )
          aligner,
          quantifier,
          "', '".join(task_cfg['loci_stat'][quantifier][aligner][proj_comp]['out_file_path_list']), 
-         "', '".join(task_cfg['loci_stat'][quantifier][aligner][proj_comp]['in_file_path_list']), 
+         "', '".join([re.sub(r'\.bam$', '.bai', s) for s in task_cfg['loci_stat'][quantifier][aligner][proj_comp]['in_file_path_list']]), 
          local_resource,
          task_cfg['loci_stat'][quantifier][aligner][proj_comp]['shell_script_path'], 
          project_cfg['pipeline']['software']['bigdatascript']['safeSleep'],
@@ -1743,11 +1742,10 @@ goal( [ '{}' ] )
                     local_resource = ''
                     if args.system_type == 'cluster':
                         pbs_ppn = min([project_cfg['pipeline']['software'][caller]['threads'], args.threads])
-                        local_resource = ', cpus := {}, mem := {}*G, timeout := {}*hour, taskName := "{}.{}.{}.{}"'.format(
+                        local_resource = ', cpus := {}, mem := {}*G, timeout := {}*hour, taskName := "GSEA.{}.{}.{}"'.format(
                             pbs_ppn,
                             pbs_ppn * 8,
                             72,
-                            caller,
                             quantifier,
                             aligner,
                             project_cfg['project']['name']
