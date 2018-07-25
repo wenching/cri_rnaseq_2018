@@ -721,7 +721,7 @@ goal( [ '{}' ] )
                  alnqctool,
                  module,
                  "', '".join(task_cfg['aln_qc'][alnqctool][aligner][library][module]['out_file_path_list']), 
-                 "', '".join(task_cfg['aln_qc']['main'][aligner][library]['in_file_path_list']), 
+                 "', '".join([re.sub(r'\.bam$', '.bai', s) for s in task_cfg['aln_qc']['main'][aligner][library]['in_file_path_list']]), 
                  local_resource,
                  task_cfg['aln_qc'][alnqctool][aligner][library][module]['shell_script_path'], 
                  project_cfg['pipeline']['software']['bigdatascript']['safeSleep'],
