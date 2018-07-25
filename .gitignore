@@ -2,6 +2,16 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.log
+.DS_Store
+Submit_RNAseq.DLBC.bds.*
+example/
+git_push.sh
+*.wp[ru]
+bds.pid.*
+log.txt
+*_test_args.R
+.Rhistory
 
 # C extensions
 *.so
