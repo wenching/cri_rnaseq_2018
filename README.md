@@ -33,24 +33,24 @@ This repository contains the following items:
 
 ```
 git clone git://github.com/wenching/cri_rnaseq_2018.git
-cd CRI_RNAseq_2018
+cd cri_rnaseq_2018
 bash Build_RNAseq.DLBC.sh
 bash example/DLBC/Submit_RNAseq.DLBC.sh
 ```
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://github.com/kmhernan/CRI_RNAseq_2018/blob/master/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://github.com/wenching/cri_rnaseq_2018/blob/master/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
-For the versions available, see the [tags on this repository](https://github.com/kmhernan/CRI_RNAseq_2018/tags).
+For the versions available, see the [tags on this repository](https://github.com/wenching/cri_rnaseq_2018/tags).
 
 ## Authors
 
 * **Wen-Ching Chan** - *Initial work* - [Wen-Ching](https://github.com/wenching)
 
-See also the list of [contributors](https://github.com/kmhernan/CRI_RNAseq_2018/graphs/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/wenching/cri_rnaseq_2018/graphs/contributors) who participated in this project.
 
 ## License
 
