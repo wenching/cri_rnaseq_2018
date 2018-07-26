@@ -20,7 +20,7 @@ import module.quantification
 import module.callloci
 import module.quantqc
 import module.locistat
-import module.gsea
+import module.postana
 
 import util.ddictfunc
 import util.hashlib
@@ -219,6 +219,8 @@ Contact     : Wen-Ching Chan <wchan10@bsd.uchicago.edu>
             print(exc)
 
 
+    project_cfg['project']['name'] = args.proj
+
     logging.info("DETERMINE whether running as practice\n")
     
     if project_cfg['project']['ex_meta_data_md5'] == curr_meta_data_md5:
@@ -364,11 +366,20 @@ Contact     : Wen-Ching Chan <wchan10@bsd.uchicago.edu>
     logging.info("Alignment QC\n")
     
     if("RNAseq" in project_cfg['project']['application']):
-        alnqctool_list = \
-            [
-                "picard",
-                "rseqc"
-            ]
+        dict_aln_qc_tool = \
+            {
+                "picard":
+                [
+                    "CollectRnaSeqMetrics"
+                ],
+                "rseqc":
+                [
+                    "clipping_profile.py",
+                    #"geneBody_coverage.py", # DISABLE from example due to long running time
+                    "infer_experiment.py",
+                    "RPKM_saturation.py"
+                ]
+            }
     else:
         logging.error(
             "PLEASE specify tools for alignment QC in [{}]\n".format(
@@ -377,11 +388,11 @@ Contact     : Wen-Ching Chan <wchan10@bsd.uchicago.edu>
         )
         sys.exit()    
 
-    #util.ddictfunc.pprint_ddicts(project_cfg['pipeline']['software'], alnqctool_list)
+    #util.ddictfunc.pprint_ddicts(project_cfg['pipeline']['software'], dict_aln_qc_tool.keys())
 
     module.alnqc.aln_qc(
         args=args,
-        sw_cfg=util.ddictfunc.subset(project_cfg['pipeline']['software'], alnqctool_list),
+        sw_cfg=util.ddictfunc.subset(project_cfg['pipeline']['software'], dict_aln_qc_tool.keys()),
         task_cfg=task_cfg['aln_qc']
     )
 
@@ -466,32 +477,38 @@ Contact     : Wen-Ching Chan <wchan10@bsd.uchicago.edu>
     logging.debug("Loci Statistics - DONE\n")
 
 
-
-    logging.info("GSEA\n")
+    logging.info("Post Analysis - Heat Map & GSEA\n")
 
     if("RNAseq" in project_cfg['project']['application']):
-        gsea_list = \
-            [
-                "clusterprofiler"
-            ]
+        dict_post_ana_tool = \
+            {
+                "pheatmap":
+                [
+                    "heatmap.pdf"
+                ],
+                "clusterprofiler":
+                [
+                    "enrichGO.ALL.txt"
+                ]
+            }
     else:
         logging.error(
-            "PLEASE specify tools for loci statistics in [{}]\n".format(
+            "PLEASE specify tools for post analysis in [{}]\n".format(
                 project_cfg['project']['application']
             )
         )
         sys.exit()
 
-    #util.ddictfunc.pprint_ddicts(project_cfg['pipeline']['software'], gsea_list)
-    #util.ddictfunc.pprint_ddicts(task_cfg['gsea'])
+    #util.ddictfunc.pprint_ddicts(project_cfg['pipeline']['software'], dict_post_ana_tool.keys())
+    #util.ddictfunc.pprint_ddicts(task_cfg['post_ana'])
 
-    module.gsea.gsea(
+    module.postana.post_ana(
         args=args,
-        sw_cfg=util.ddictfunc.subset(project_cfg['pipeline']['software'], gsea_list),
-        task_cfg=task_cfg['gsea']
+        sw_cfg=util.ddictfunc.subset(project_cfg['pipeline']['software'], dict_post_ana_tool.keys()),
+        task_cfg=task_cfg['post_ana']
     )    
 
-    logging.debug("GSEA - DONE\n")
+    logging.debug("Post Analysis - Heat Map & GSEA - DONE\n")
 
 
     logging.info("Make Submitter Shell Script of Master BigDataScript Script\n")

@@ -194,7 +194,7 @@ def make_master_bds(args, meta_data, project_cfg, task_cfg):
                     {'read_qc': {'KO01': {'SRR1205282': {'in_file_path_list': ['/group/bioinformatics/CRI_RNAseq_2018/example/data/WT01.test.fastq.gz'],
                                                          'log_file_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282/run.RawReadQC.FastQC.SRR1205282.log',
                                                          'out_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282',
-                                                         'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282/WT01.test_fastqc.zip'],
+                                                         'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282/SRR1205282_fastqc.zip'],
                                                          'shell_script_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Shell/run.RawReadQC.FastQC.SRR1205282.sh'}},
                                  'main': {'out_step_dir': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/RawReadQC'}}}
                     '''
@@ -516,15 +516,19 @@ goal( [ '{}' ] )
         print(exc)
 
     if("RNAseq" == proj_appl):
-        aln_qc_tool = \
+        dict_aln_qc_tool = \
             {
-                "picard": [
-                    "CollectRnaSeqMetrics"],
-                "rseqc": [
+                "picard":
+                [
+                    "CollectRnaSeqMetrics"
+                ],
+                "rseqc":
+                [
                     "clipping_profile.py",
                     #"geneBody_coverage.py", # DISABLE from example due to long running time
                     "infer_experiment.py",
-                    "RPKM_saturation.py"]
+                    "RPKM_saturation.py"
+                ]
             }
     else:
         logging.error(
@@ -544,7 +548,7 @@ goal( [ '{}' ] )
                     task_cfg['aln_qc']['main'][aligner][library]['in_file_path_list'] = \
                         task_cfg['merge_aln'][aligner][library]['out_file_path_list'].copy()
 
-    for alnqctool,module_list in aln_qc_tool.items():
+    for alnqctool,module_list in dict_aln_qc_tool.items():
         task_cfg['aln_qc'][alnqctool]['main']['module'] = module_list
 
         logging.info(
@@ -1224,11 +1228,11 @@ goal( [ '{}' ] )
                 logging.debug("MKDIR: [ $out_dir_t_path ]")
                 os.makedirs(out_dir_t_path, exist_ok=True)
 
-    for quantqctool in quant_qc_tool:
+    for tool in quant_qc_tool:
         logging.info(
             "[ {} ] Quantification QC:: Quantification QC tool: {}\n".format(
                 SELF_FILE,
-                quantqctool
+                tool
             )
         )
         for quantifier in project_cfg['quantifiers']:
@@ -1247,31 +1251,31 @@ goal( [ '{}' ] )
                     )
                 )
 
-                task_cfg['quant_qc'][quantqctool][quantifier][aligner]['out_file_path_list'] = \
+                task_cfg['quant_qc'][tool][quantifier][aligner]['out_file_path_list'] = \
                     [
                         '{}/{}.{}.{}.{}.{}'.format(
                             task_cfg['quant_qc']['main'][quantifier][aligner]['out_dir_path'],
                             project_cfg['project']['name'],
                             aligner,
                             quantifier,
-                            quantqctool,
+                            tool,
                             "pdf"
                         )
                     ]
 
-                task_cfg['quant_qc'][quantqctool][quantifier][aligner]['shell_script_path'] = \
+                task_cfg['quant_qc'][tool][quantifier][aligner]['shell_script_path'] = \
                     '{}/run.quantQC.{}.{}.{}.{}.sh'.format(
                         shell_dir_path,
-                        quantqctool,
+                        tool,
                         quantifier,
                         aligner,
                         project_cfg['project']['name']
                     )
 
-                task_cfg['quant_qc'][quantqctool][quantifier][aligner]['log_file_path'] = \
+                task_cfg['quant_qc'][tool][quantifier][aligner]['log_file_path'] = \
                     '{}/run.quantQC.{}.{}.{}.{}.log'.format(
                         task_cfg['quant_qc']['main'][quantifier][aligner]['out_dir_path'],
-                        quantqctool,
+                        tool,
                         quantifier,
                         aligner,
                         project_cfg['project']['name']
@@ -1312,7 +1316,7 @@ goal( [ '{}' ] )
                         pbs_ppn,
                         pbs_ppn * 8,
                         72,
-                        quantqctool,
+                        tool,
                         quantifier,
                         aligner,
                         project_cfg['project']['name']
@@ -1322,7 +1326,7 @@ goal( [ '{}' ] )
                 try:
                     with open(out_file_path, "a") as outfile:
                         outfile.write('''
-// Quantification QC: [ {} ] aligned by [ {} ], quantified by  [ {} ], and called by [ {} ]
+// Quantification QC: [ {} ] aligned by [ {} ], quantified by  [ {} ], and called by [ {} ] using quantificaiton QC tool [ {} ]
 
 dep( [ '{}' ] <- [ '{}' ]{}) sys bash {}; sleep {}
 goal( [ '{}' ] )
@@ -1331,12 +1335,13 @@ goal( [ '{}' ] )
          aligner,
          quantifier,
          caller,
-         "', '".join(task_cfg['quant_qc'][quantqctool][quantifier][aligner]['out_file_path_list']),
+         tool,
+         "', '".join(task_cfg['quant_qc'][tool][quantifier][aligner]['out_file_path_list']),
          "', '".join(task_cfg['quant_qc']['main'][quantifier][aligner]['in_file_path_list']),
          local_resource,
-         task_cfg['quant_qc'][quantqctool][quantifier][aligner]['shell_script_path'],
+         task_cfg['quant_qc'][tool][quantifier][aligner]['shell_script_path'],
          project_cfg['pipeline']['software']['bigdatascript']['safeSleep'],
-         "', '".join(task_cfg['quant_qc'][quantqctool][quantifier][aligner]['out_file_path_list'])
+         "', '".join(task_cfg['quant_qc'][tool][quantifier][aligner]['out_file_path_list'])
      ))
                         outfile.close()
                 except IOError as exc:
@@ -1359,7 +1364,7 @@ goal( [ '{}' ] )
         logging.debug(
             "[ {} ] Quantification QC:: Quantification QC tool: {} - DONE\n".format(
                 SELF_FILE,
-                quantqctool
+                tool
             )
         )
 
@@ -1391,6 +1396,7 @@ goal( [ '{}' ] )
             [
                 "venn"
             ]
+        caller = 'deseq2' if 'deseq2' in project_cfg['callers'] else project_cfg['callers'][1]
     else:
         logging.error(
             "[ {} ] cannot recognize [{}]\n".format(
@@ -1419,7 +1425,6 @@ goal( [ '{}' ] )
                 )
             )
 
-            caller = 'deseq2' if 'deseq2' in project_cfg['callers'] else project_cfg['callers'][1]
             task_cfg['loci_stat'][quantifier][aligner]['main']['anchor_file_path'] = \
                 '{}/{}.{}.{}.{}.{}'.format(
                     task_cfg['call'][caller][quantifier][aligner]['out_dir_path'],
@@ -1607,21 +1612,29 @@ goal( [ '{}' ] )
     logging.debug("[ {} ] Loci Statistics - DONE\n".format(SELF_FILE))
 
 
-    logging.info("[ {} ] GSEA\n".format(SELF_FILE))
+    logging.info("[ {} ] Post Analysis - Heat Map & GSEA\n".format(SELF_FILE))
 
     out_file_path = args.submitter
     try:
         with open(out_file_path, "a") as outfile:
-            outfile.write("\n// GSEA >>>\n\n\n")
+            outfile.write("\n// Post Analysis >>>\n\n\n")
             outfile.close()
     except IOError as exc:
         print(exc)
 
     if("RNAseq" == proj_appl):
-        gsea_list = \
-            [
-                "clusterprofiler"
-            ]
+        dict_post_ana_tool = \
+            {
+                "pheatmap":
+                [
+                    "heatmap.pdf"
+                ],
+                "clusterprofiler":
+                [
+                    "enrichGO.ALL.txt"
+                ]
+            }
+        caller = 'deseq2' if 'deseq2' in project_cfg['callers'] else project_cfg['callers'][1]
     else:
         logging.error(
             "[ {} ] cannot recognize [{}]\n".format(
@@ -1631,17 +1644,17 @@ goal( [ '{}' ] )
         )
         sys.exit()
 
-    task_cfg['gsea']['references'][target_genome] = project_cfg['pipeline']['references'][target_genome]
-    task_cfg['gsea']['main'].update({'application': proj_appl})
+    task_cfg['post_ana']['references'][target_genome] = project_cfg['pipeline']['references'][target_genome]
+    task_cfg['post_ana']['main'].update({'application': proj_appl})
 
     for quantifier in project_cfg['quantifiers']:
         for aligner in project_cfg['aligners']:
             if True:
                 proj_comp = project_cfg['project']['name']
 
-                task_cfg['gsea']['main'][quantifier][aligner][proj_comp]['in_file_path_list'] = []
+                task_cfg['post_ana']['main'][quantifier][aligner][proj_comp]['in_file_path_list'] = []
 
-                task_cfg['gsea']['main'][quantifier][aligner][proj_comp]['in_file_path_list'].append(
+                task_cfg['post_ana']['main'][quantifier][aligner][proj_comp]['in_file_path_list'].append(
                     '{}/{}.{}.{}.{}'.format(
                         task_cfg['loci_stat'][quantifier][aligner][proj_comp]['out_dir_path'],
                         proj_comp,
@@ -1651,17 +1664,36 @@ goal( [ '{}' ] )
                     )
                 )
 
-    for gseatool in gsea_list:
+                task_cfg['post_ana']['main'][quantifier][aligner][proj_comp]['expr_tbl_path'] = \
+                    '{}/{}.{}.{}.{}.{}'.format(
+                        task_cfg['call'][caller][quantifier][aligner]['out_dir_path'],
+                        project_cfg['project']['name'],
+                        aligner,
+                        quantifier,
+                        caller,
+                        "count.txt"                        
+                    )
+                
+                if project_cfg['project']['run_as_practice']:
+                    task_cfg['post_ana']['main'][quantifier][aligner][proj_comp]['expr_tbl_path'] = \
+                        re.sub(
+                            r'DLBC/RNAseq',
+                            'DLBC_full/RNAseq',
+                            task_cfg['post_ana']['main'][quantifier][aligner][proj_comp]['expr_tbl_path']
+                        )
+                    logging.debug("[RUN_AS_PRACTICE] useing full set result instead")
+
+    for tool,ext_list in dict_post_ana_tool.items():
         logging.info(
-            "[ {} ] GSEA:: GSEA tool: {}\n".format(
+            "[ {} ] Post Analysis:: tool: {}\n".format(
                 SELF_FILE,
-                gseatool
+                tool
             )
         )
 
         for quantifier in project_cfg['quantifiers']:
             logging.info(
-                "[ {} ] GSEA:: Quantifier: {}\n".format(
+                "[ {} ] Post Analysis:: Quantifier: {}\n".format(
                     SELF_FILE,
                     quantifier
                 )
@@ -1669,7 +1701,7 @@ goal( [ '{}' ] )
 
             for aligner in project_cfg['aligners']:
                 logging.info(
-                    "[ {} ] GSEA:: Aligner: {}\n".format(
+                    "[ {} ] Post Analysis:: Aligner: {}\n".format(
                         SELF_FILE,
                         aligner
                     )
@@ -1678,74 +1710,85 @@ goal( [ '{}' ] )
                 if True:
                     proj_comp = project_cfg['project']['name']
 
-                    task_cfg['gsea'][gseatool][quantifier][aligner][proj_comp]['out_dir_path'] = \
-                        '{}/GSEA/{}/{}/{}'.format(
+                    task_cfg['post_ana'][tool][quantifier][aligner][proj_comp]['out_dir_path'] = \
+                        '{}/PostAna/{}/{}/{}/{}'.format(
                             appl_dir_path,
+                            tool,
                             quantifier,
                             aligner,
                             proj_comp
                         )
-                    out_dir_t_path = task_cfg['gsea'][gseatool][quantifier][aligner][proj_comp]['out_dir_path']
+                    
+                    out_dir_t_path = task_cfg['post_ana'][tool][quantifier][aligner][proj_comp]['out_dir_path']
                     if not os.path.exists(out_dir_t_path):
                         logging.debug("MKDIR: [ $out_dir_t_path ]")
                         os.makedirs(out_dir_t_path, exist_ok=True)
 
-                    task_cfg['gsea'][gseatool][quantifier][aligner][proj_comp]['out_file_path_list'] = \
-                        [
-                            '{}/{}.{}.{}.{}'.format(
-                                task_cfg['gsea'][gseatool][quantifier][aligner][proj_comp]['out_dir_path'],
-                                proj_comp,
-                                aligner,
-                                quantifier,
-                                "enrichGO.ALL.txt"
-                            )
-                        ]
+                    out_file_base = \
+                        '{}/{}.{}.{}'.format(
+                            task_cfg['post_ana'][tool][quantifier][aligner][proj_comp]['out_dir_path'],
+                            proj_comp,
+                            aligner,
+                            quantifier
+                        )
+                    
+                    task_cfg['post_ana'][tool][quantifier][aligner][proj_comp]['out_file_path_list'] = \
+                            [
+                                '{}.{}'.format(
+                                    out_file_base,
+                                    ext
+                                ) for ext in ext_list
+                            ]
 
-                    task_cfg['gsea'][gseatool][quantifier][aligner][proj_comp]['shell_script_path'] = \
-                        '{}/run.GSEA.{}.{}.{}.sh'.format(
+                    task_cfg['post_ana'][tool][quantifier][aligner][proj_comp]['shell_script_path'] = \
+                        '{}/run.postAna.{}.{}.{}.{}.sh'.format(
                             shell_dir_path,
+                            tool,
                             quantifier,
                             aligner,
                             proj_comp
                         )
 
-                    task_cfg['gsea'][gseatool][quantifier][aligner][proj_comp]['log_file_path'] = \
-                        '{}/run.GSEA.{}.{}.{}.log'.format(
-                            task_cfg['gsea'][gseatool][quantifier][aligner][proj_comp]['out_dir_path'],
+                    task_cfg['post_ana'][tool][quantifier][aligner][proj_comp]['log_file_path'] = \
+                        '{}/run.postAna.{}.{}.{}.{}.log'.format(
+                            task_cfg['post_ana'][tool][quantifier][aligner][proj_comp]['out_dir_path'],
+                            tool,
                             quantifier,
                             aligner,
                             proj_comp
                         )
 
-                    #util.ddictfunc.pprint_ddicts(task_cfg, ['gsea'])
+                    #util.ddictfunc.pprint_ddicts(task_cfg, ['post_ana'])
                     '''
-                    {'gsea': {'clusterprofiler': {'featurecounts': {'star': {'DLBC': {'log_file_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/GSEA/featurecounts/star/DLBC/run.call.featurecounts.star.DLBC.log',
-                                                                                      'out_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/GSEA/featurecounts/star/DLBC',
-                                                                                      'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/GSEA/featurecounts/star/DLBC/DLBC.star.featurecounts.enrichGO.ALL.txt'],
-                                                                                      'shell_script_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/shell_scripts/run.lociStat.featurecounts.star.DLBC.sh'}}}},
-                              'main': {'application': 'RNAseq',
-                                       'featurecounts': {'star': {'DLBC': {'in_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/DLBC.star.featurecounts.overlap.txt']}}}},
-                              'references': {'grch38': {'anno_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
-                                                        'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
-                                                        'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.gtf',
-                                                        'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.refFlat.txt',
-                                                        'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.bed',
-                                                        'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.interval_list',
-                                                        'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.chrom.size',
-                                                        'chrs': 'chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM',
-                                                        'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.fa',
-                                                        'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.dict',
-                                                        'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11'}}}}
+                    {'post_ana': {'main': {'application': 'RNAseq',
+                                           'featurecounts': {'star': {'DLBC': {'expr_tbl_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC_full/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.count.txt',
+                                                                               'in_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/DLBC.star.featurecounts.overlap.txt']}}}},
+                                  'pheatmap': {'featurecounts': {'star': {'DLBC': {'log_file_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/PostAna/pheatmap/featurecounts/star/DLBC/run.postAna.pheatmap.featurecounts.star.DLBC.log',
+                                                                                   'out_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/PostAna/pheatmap/featurecounts/star/DLBC',
+                                                                                   'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/PostAna/pheatmap/featurecounts/star/DLBC/DLBC.star.featurecounts.heatmap.pdf'],
+                                                                                   'shell_script_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/shell_scripts/run.postAna.pheatmap.featurecounts.star.DLBC.sh'}}}},
+                                  'references': {'grch38': {'anno_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
+                                                            'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
+                                                            'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.gtf',
+                                                            'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.refFlat.txt',
+                                                            'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.bed',
+                                                            'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.interval_list',
+                                                            'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.chrom.size',
+                                                            'chrs': 'chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM',
+                                                            'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.fa',
+                                                            'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.dict',
+                                                            'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11'}}}}
+                    '''
 
-                    '''
 
                     local_resource = ''
                     if args.system_type == 'cluster':
                         pbs_ppn = min([project_cfg['pipeline']['software'][caller]['threads'], args.threads])
-                        local_resource = ', cpus := {}, mem := {}*G, timeout := {}*hour, taskName := "GSEA.{}.{}.{}"'.format(
+                        local_resource = ', cpus := {}, mem := {}*G, timeout := {}*hour, taskName := "postAna.{}.{}.{}.{}"'.format(
                             pbs_ppn,
                             pbs_ppn * 8,
                             72,
+                            tool,
                             quantifier,
                             aligner,
                             project_cfg['project']['name']
@@ -1755,7 +1798,7 @@ goal( [ '{}' ] )
                     try:
                         with open(out_file_path, "a") as outfile:
                             outfile.write('''
-// GSEA: [ {} ] aligned by [ {} ] and quantified by  [ {} ]
+// Post Analysis: [ {} ] aligned by [ {} ] and quantified by  [ {} ] using post analysis tool [ {} ]
 
 dep( [ '{}' ] <- [ '{}' ]{}) sys bash {}; sleep {}
 goal( [ '{}' ] )
@@ -1763,56 +1806,57 @@ goal( [ '{}' ] )
          project_cfg['project']['name'],
          aligner,
          quantifier,
-         "', '".join(task_cfg['gsea'][gseatool][quantifier][aligner][proj_comp]['out_file_path_list']),
-         "', '".join(task_cfg['gsea']['main'][quantifier][aligner][proj_comp]['in_file_path_list']),
+         tool,
+         "', '".join(task_cfg['post_ana'][tool][quantifier][aligner][proj_comp]['out_file_path_list']),
+         "', '".join(task_cfg['post_ana']['main'][quantifier][aligner][proj_comp]['in_file_path_list']),
          local_resource,
-         task_cfg['gsea'][gseatool][quantifier][aligner][proj_comp]['shell_script_path'],
+         task_cfg['post_ana'][tool][quantifier][aligner][proj_comp]['shell_script_path'],
          project_cfg['pipeline']['software']['bigdatascript']['safeSleep'],
-         "', '".join(task_cfg['gsea'][gseatool][quantifier][aligner][proj_comp]['out_file_path_list'])
+         "', '".join(task_cfg['post_ana'][tool][quantifier][aligner][proj_comp]['out_file_path_list'])
      ))
                             outfile.close()
                     except IOError as exc:
                         print(exc)
 
                     logging.debug(
-                        "[ {} ] GSEA:: Project: {} - DONE\n".format(
+                        "[ {} ] Post Analysis:: Project: {} - DONE\n".format(
                             SELF_FILE,
                             proj_comp
                         )
                     )
 
                 logging.debug(
-                    "[ {} ] GSEA:: Aligner: {} - DONE\n".format(
+                    "[ {} ] Post Analysis:: Aligner: {} - DONE\n".format(
                         SELF_FILE,
                         aligner
                     )
                 )
 
             logging.debug(
-                "[ {} ] GSEA:: Quantifier: {} - DONE\n".format(
+                "[ {} ] Post Analysis:: Quantifier: {} - DONE\n".format(
                     SELF_FILE,
                     quantifier
                 )
             )
 
         logging.debug(
-            "[ {} ] GSEA:: GSEA tool: {} - DONE\n".format(
+            "[ {} ] Post Analysis:: tool: {} - DONE\n".format(
                 SELF_FILE,
-                gseatool
+                tool
             )
         )
 
     out_file_path = args.submitter
     try:
         with open(out_file_path, "a") as outfile:
-            outfile.write("\n// <<< GSEA\n\n\n")
+            outfile.write("\n// <<< Post Analysis\n\n\n")
             outfile.close()
     except IOError as exc:
         print(exc)
 
-    #util.ddictfunc.pprint_ddicts(task_cfg, ['gsea'])
+    #util.ddictfunc.pprint_ddicts(task_cfg, ['post_ana'])
 
-    logging.debug("[ {} ] GSEA - DONE\n".format(SELF_FILE))
+    logging.debug("[ {} ] Post Analysis - Heat Map & GSEA - DONE\n".format(SELF_FILE))
 
 
     return

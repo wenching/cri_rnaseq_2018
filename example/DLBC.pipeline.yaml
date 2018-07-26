@@ -66,6 +66,12 @@ pipeline:
       mem: 4
       module: module purge; module load gcc R/3.5.0; module update
       threads: 1
+    pheatmap:
+      exe: "Rscript --vanilla"
+      script: "module/pheatmap.R"
+      mem: 4
+      module: module purge; module load gcc R/3.5.0; module update
+      threads: 4
     clusterprofiler:
       exe: "Rscript --vanilla"
       script: "module/clusterProfiler.R"
@@ -204,7 +210,7 @@ pipeline:
       pval: 0.1
       filter_4_low_expr: True
 project:
-  name: DLBC
+  name: ~
   proj_dir_path: ~
   appl_dir_path: ~
   meta_data_path: ~
