@@ -4,11 +4,10 @@
 #' 
 #' run clusterProfiler
 #' 
-#' @param metaData character. meta data file
 #' @param GTF character. GTF file
 #' @param inPath character vector. input
 #' @param outPath character vector. output
-#' @usage callLoci::clusterProfiler(inPath, outPath, ...)
+#' @usage postAna::clusterProfiler(inPath, outPath, ...)
 #' @return NULL
 #' @details TBC
 #' @note TBC
@@ -20,7 +19,7 @@
 #' 
 #' @references TBC
 #' @example
-#' callLoci::clusterProfiler("overlap.txt", "enrichGO.ALL.txt")
+#' postAna::clusterProfiler("overlap.txt", "enrichGO.ALL.txt")
 
 
 

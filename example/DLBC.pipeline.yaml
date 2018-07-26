@@ -66,6 +66,12 @@ pipeline:
       mem: 4
       module: module purge; module load gcc R/3.5.0; module update
       threads: 1
+    pheatmap:
+      exe: "Rscript --vanilla"
+      script: "module/pheatmap.R"
+      mem: 4
+      module: module purge; module load gcc R/3.5.0; module update
+      threads: 4
     clusterprofiler:
       exe: "Rscript --vanilla"
       script: "module/clusterProfiler.R"
