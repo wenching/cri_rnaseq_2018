@@ -1308,7 +1308,7 @@ Considering the environment setting in the CRI HPC system, [BigDataScript](https
 
 After the completion of entire pipeline, you will see a BigDataScript report in HTML under the pipeline folder. For instance, this is the report from one test run. The graphic time line will tell you the execution time per sub-task script.
 
-<img src="IMG/Submit_RNAseq.DLBC.bds.20180725_151733_662.report.png" alt="KO01_plotMA"  width="800" height="600">
+<img src="IMG/Submit.RNAseq.DLBC.bds.report.png" alt="Submit.RNAseq.DLBC.bds"  width="800" height="600">
 
 
 ## <a name="Ref"/>Reference | [Top](#Top)
