@@ -210,7 +210,7 @@ pipeline:
       pval: 0.1
       filter_4_low_expr: True
 project:
-  name: DLBC
+  name: ~
   proj_dir_path: ~
   appl_dir_path: ~
   meta_data_path: ~

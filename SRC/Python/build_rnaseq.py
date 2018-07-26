@@ -219,6 +219,8 @@ Contact     : Wen-Ching Chan <wchan10@bsd.uchicago.edu>
             print(exc)
 
 
+    project_cfg['project']['name'] = args.proj
+
     logging.info("DETERMINE whether running as practice\n")
     
     if project_cfg['project']['ex_meta_data_md5'] == curr_meta_data_md5:

@@ -1,11 +1,11 @@
 ---
 title: "Analyzing Illumina RNA-seq Data with the CRI HPC"
-author: "[Wen-Ching Chan](http://cri.uchicago.edu/people/#chan)"
-package: CRI_RNAseq_2018
+author: '[Wen-Ching Chan](http://cri.uchicago.edu/people/#chan)'
 date: "July, 2018"
-output: 
+output:
   html_document:
-    keep_md: true
+    keep_md: yes
+package: CRI_RNAseq_2018
 ---
 
 
@@ -548,15 +548,15 @@ The BDS code snippet for the sample KO01 will look like:
 
 ```bash
 $ grep -A1 run.RawReadQC.FastQC.SRR1205282.sh example/DLBC/Submit_RNAseq.DLBC.bds
-dep( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282/KO01.test_fastqc.zip' ] <- [ '/group/bioinformatics/CRI_RNAseq_2018/example/data/KO01.test.fastq.gz' ], cpus := 1, mem := 16*G, timeout := 72*hour, taskName := "FastQC.SRR1205282") sys bash /home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.RawReadQC.FastQC.SRR1205282.sh; sleep 2
-goal( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282/KO01.test_fastqc.zip' ] )
+dep( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282/KO01.test_fastqc.zip' ] <- [ '/group/bioinformatics/CRI_RNAseq_2018/example/data/KO01.test.fastq.gz' ], cpus := 1, mem := 16*G, timeout := 72*hour, taskName := "FastQC.SRR1205282") sys bash /home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.RawReadQC.FastQC.SRR1205282.sh; sleep 2
+goal( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282/KO01.test_fastqc.zip' ] )
 ```
 
 This code chunk will invoke the bash script example/DLBC/RNAseq/shell_scripts/**`run.RawReadQC.FastQC.SRR1205282.sh`** to execute FastQC on the KO01(SRR1205282) sequencing library.
 
 After the completion of entire pipeline, you can check FastQC report per individual libraries; for instance, the partial report of KO01 will be as follows or a full [report](result/KO01.test_fastqc.html).
 
-<img src="result/KO01.test_fastqc.pdf" alt="KO01_FastQC"  width="800" height="1200">
+<img src="IMG/KO01.test_fastqc.png" alt="KO01_FastQC"  width="800" height="1200">
 
 You can check [FastQC Help](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/) for more details about how to interpret a FastQC report.
 
@@ -574,8 +574,8 @@ The BDS code snippet for the sample KO01 will look like:
 
 ```bash
 $ grep -A1 run.alignRead.star.SRR1205282.sh example/DLBC/Submit_RNAseq.DLBC.bds
-dep( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/SRR1205282/SRR1205282.star.bam' ] <- [ '/group/bioinformatics/CRI_RNAseq_2018/example/data/KO01.test.fastq.gz' ], cpus := 4, mem := 64*G, timeout := 72*hour, taskName := "star.SRR1205282") sys bash /home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.alignRead.star.SRR1205282.sh; sleep 2
-goal( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/SRR1205282/SRR1205282.star.bam' ] )
+dep( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/SRR1205282/SRR1205282.star.bam' ] <- [ '/group/bioinformatics/CRI_RNAseq_2018/example/data/KO01.test.fastq.gz' ], cpus := 4, mem := 64*G, timeout := 72*hour, taskName := "star.SRR1205282") sys bash /home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.alignRead.star.SRR1205282.sh; sleep 2
+goal( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/SRR1205282/SRR1205282.star.bam' ] )
 ```
 
 This code chunk will invoke the bash script example/DLBC/RNAseq/shell_scripts/**`run.alignRead.star.SRR1205282.sh`** to execute STAR on the KO01(SRR1205282) sequencing library.
@@ -650,17 +650,17 @@ The BDS code snippets for the sample KO01 will look like:
 
 ```bash
 $ grep -A1 run.alnQC.*.star.KO01.*.sh example/DLBC/Submit_RNAseq.DLBC.bds
-dep( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics.pdf' ] <- [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bai' ], cpus := 4, mem := 32*G, timeout := 72*hour, taskName := "picard.star.KO01") sys bash /home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.alnQC.picard.star.KO01.CollectRnaSeqMetrics.sh; sleep 2
-goal( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics.pdf' ] )
+dep( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics.pdf' ] <- [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bai' ], cpus := 4, mem := 32*G, timeout := 72*hour, taskName := "picard.star.KO01") sys bash /home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.alnQC.picard.star.KO01.CollectRnaSeqMetrics.sh; sleep 2
+goal( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics.pdf' ] )
 --
-dep( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.clipping_profile.xls', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.clipping_profile.r', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.clipping_profile.pdf' ] <- [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bai' ], cpus := 1, mem := 8*G, timeout := 72*hour, taskName := "rseqc.star.KO01") sys bash /home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.alnQC.rseqc.star.KO01.clipping_profile.py.sh; sleep 2
-goal( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.clipping_profile.xls', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.clipping_profile.r', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.clipping_profile.pdf' ] )
+dep( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.clipping_profile.xls', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.clipping_profile.r', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.clipping_profile.pdf' ] <- [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bai' ], cpus := 1, mem := 8*G, timeout := 72*hour, taskName := "rseqc.star.KO01") sys bash /home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.alnQC.rseqc.star.KO01.clipping_profile.py.sh; sleep 2
+goal( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.clipping_profile.xls', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.clipping_profile.r', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.clipping_profile.pdf' ] )
 --
-dep( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.infer_experiment.txt' ] <- [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bai' ], cpus := 1, mem := 8*G, timeout := 72*hour, taskName := "rseqc.star.KO01") sys bash /home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.alnQC.rseqc.star.KO01.infer_experiment.py.sh; sleep 2
-goal( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.infer_experiment.txt' ] )
+dep( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.infer_experiment.txt' ] <- [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bai' ], cpus := 1, mem := 8*G, timeout := 72*hour, taskName := "rseqc.star.KO01") sys bash /home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.alnQC.rseqc.star.KO01.infer_experiment.py.sh; sleep 2
+goal( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.infer_experiment.txt' ] )
 --
-dep( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.eRPKM.xls', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.rawCount.xls', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.saturation.r' ] <- [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bai' ], cpus := 1, mem := 8*G, timeout := 72*hour, taskName := "rseqc.star.KO01") sys bash /home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.alnQC.rseqc.star.KO01.RPKM_saturation.py.sh; sleep 2
-goal( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.eRPKM.xls', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.rawCount.xls', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.saturation.r' ] )
+dep( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.eRPKM.xls', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.rawCount.xls', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.saturation.r' ] <- [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bai' ], cpus := 1, mem := 8*G, timeout := 72*hour, taskName := "rseqc.star.KO01") sys bash /home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.alnQC.rseqc.star.KO01.RPKM_saturation.py.sh; sleep 2
+goal( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.eRPKM.xls', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.rawCount.xls', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.saturation.r' ] )
 ```
 
 This code chunk will invoke few bash scripts (e.g., example/DLBC/RNAseq/shell_scripts/**`run.alnQC.picard.star.KO01.CollectRnaSeqMetrics.sh`**, **`run.alnQC.rseqc.star.KO01.clipping_profile.py.sh`**, **`run.alnQC.rseqc.star.KO01.infer_experiment.py.sh`**, and **`run.alnQC.rseqc.star.KO01.RPKM_saturation.py.sh`**) to execute alignment QC tools (i.e., Picard and RSeQC) on the sample KO01.
@@ -686,7 +686,7 @@ You can check alignment statistics (e.g., **example/DLBC/RNAseq/AlnQC/picard/sta
 ```bash
 $ head example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics
 ## htsjdk.samtools.metrics.StringHeader
-# picard.analysis.CollectRnaSeqMetrics REF_FLAT=/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.refFlat.txt RIBOSOMAL_INTERVALS=/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.interval_list STRAND_SPECIFICITY=NONE CHART_OUTPUT=/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics.pdf METRIC_ACCUMULATION_LEVEL=[SAMPLE, ALL_READS] INPUT=/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bam OUTPUT=/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics TMP_DIR=[/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/tmp]    MINIMUM_LENGTH=500 RRNA_FRAGMENT_PERCENTAGE=0.8 ASSUME_SORTED=true STOP_AFTER=0 VERBOSITY=INFO QUIET=false VALIDATION_STRINGENCY=STRICT COMPRESSION_LEVEL=5 MAX_RECORDS_IN_RAM=500000 CREATE_INDEX=false CREATE_MD5_FILE=false GA4GH_CLIENT_SECRETS=client_secrets.json
+# picard.analysis.CollectRnaSeqMetrics REF_FLAT=/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.refFlat.txt RIBOSOMAL_INTERVALS=/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.interval_list STRAND_SPECIFICITY=NONE CHART_OUTPUT=/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics.pdf METRIC_ACCUMULATION_LEVEL=[SAMPLE, ALL_READS] INPUT=/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bam OUTPUT=/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics TMP_DIR=[/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/tmp]    MINIMUM_LENGTH=500 RRNA_FRAGMENT_PERCENTAGE=0.8 ASSUME_SORTED=true STOP_AFTER=0 VERBOSITY=INFO QUIET=false VALIDATION_STRINGENCY=STRICT COMPRESSION_LEVEL=5 MAX_RECORDS_IN_RAM=500000 CREATE_INDEX=false CREATE_MD5_FILE=false GA4GH_CLIENT_SECRETS=client_secrets.json
 ## htsjdk.samtools.metrics.StringHeader
 # Started on: Wed Jul 25 13:41:44 CDT 2018
 
@@ -698,7 +698,7 @@ PF_BASES	PF_ALIGNED_BASES	RIBOSOMAL_BASES	CODING_BASES	UTR_BASES	INTRONIC_BASES	
 
 Or, the resepctive coverage plot of the sample KO01 produced by Picard will be as follows.
 
-<img src="result/KO01.star.picard.RNA_Metrics.pdf" alt="KO01_coverage"  width="600" height="600">
+<img src="IMG/KO01.star.picard.RNA_Metrics.png" alt="KO01_coverage"  width="600" height="600">
 
 There are three alignment measurements performed using [RSeQC](http://rseqc.sourceforge.net).
 
@@ -711,7 +711,7 @@ There are three alignment measurements performed using [RSeQC](http://rseqc.sour
 
 The results will be as follows. Please check the [RSeQC](http://rseqc.sourceforge.net) web site for more measurements and details.
 
-<img src="result/KO01.star.rseqc.clipping_profile.pdf" alt="KO01_clipping_profile"  width="600" height="600">
+<img src="IMG/KO01.star.rseqc.clipping_profile.png" alt="KO01_clipping_profile"  width="600" height="600">
 
 
 ```bash
@@ -726,7 +726,7 @@ $cat example/DLBC/RNAseq/AlnQC/rseqc/star/KO01/KO01.star.rseqc.infer_experiment.
 ## Fraction of reads explained by "++,--": 0.6025
 ## Fraction of reads explained by "+-,-+": 0.3950
 ```
-<img src="result/KO01.star.pdfseqc.saturation.pdf" alt="KO01_saturation"  width="600" height="600">
+<img src="IMG/KO01.star.pdfseqc.saturation.png" alt="KO01_saturation"  width="600" height="600">
 
 
 
@@ -739,8 +739,8 @@ The BDS code snippet for the sample KO01 will look like:
 
 ```bash
 $ grep -A1 run.quant.featurecounts.star.KO01.sh example/DLBC/Submit_RNAseq.DLBC.bds
-dep( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count' ] <- [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bai' ], cpus := 4, mem := 32*G, timeout := 72*hour, taskName := "featurecounts.star.KO01") sys bash /home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.quant.featurecounts.star.KO01.sh; sleep 2
-goal( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count' ] )
+dep( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count' ] <- [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bai' ], cpus := 4, mem := 32*G, timeout := 72*hour, taskName := "featurecounts.star.KO01") sys bash /home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.quant.featurecounts.star.KO01.sh; sleep 2
+goal( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count' ] )
 ```
 
 This code chunk will invoke the bash script (e.g., example/DLBC/RNAseq/shell_scripts/**`run.quant.featurecounts.star.KO01.sh`**) to execute expression quantification tool (i.e., [Subread](http://subread.sourceforge.net/)::[featureCounts](http://bioinf.wehi.edu.au/featureCounts/) on the sample KO01.
@@ -762,7 +762,7 @@ You can check quantification statistics (e.g., **example/DLBC/RNAseq/Quantificat
 
 ```bash
 $ cat example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count.summary
-Status	/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bam
+Status	/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bam
 Assigned	213869
 Unassigned_Unmapped	0
 Unassigned_MappingQuality	0
@@ -903,14 +903,14 @@ The BDS code snippets for the example dataset will look like:
 
 ```bash
 $ grep -A1 run.call.*.featurecounts.star.DLBC.sh example/DLBC/Submit_RNAseq.DLBC.bds
-dep( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/edger/featurecounts/star/DLBC.star.featurecounts.edger.count.txt' ] <- [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO02/KO02.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO03/KO03.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT01/WT01.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT02/WT02.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT03/WT03.star.featurecounts.count' ], cpus := 4, mem := 32*G, timeout := 72*hour, taskName := "edger.featurecounts.star.DLBC") sys bash /home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.call.edger.featurecounts.star.DLBC.sh; sleep 2
-goal( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/edger/featurecounts/star/DLBC.star.featurecounts.edger.count.txt' ] )
+dep( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/edger/featurecounts/star/DLBC.star.featurecounts.edger.count.txt' ] <- [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO02/KO02.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO03/KO03.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT01/WT01.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT02/WT02.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT03/WT03.star.featurecounts.count' ], cpus := 4, mem := 32*G, timeout := 72*hour, taskName := "edger.featurecounts.star.DLBC") sys bash /home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.call.edger.featurecounts.star.DLBC.sh; sleep 2
+goal( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/edger/featurecounts/star/DLBC.star.featurecounts.edger.count.txt' ] )
 --
-dep( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.count.txt' ] <- [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO02/KO02.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO03/KO03.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT01/WT01.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT02/WT02.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT03/WT03.star.featurecounts.count' ], cpus := 4, mem := 32*G, timeout := 72*hour, taskName := "deseq2.featurecounts.star.DLBC") sys bash /home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.call.deseq2.featurecounts.star.DLBC.sh; sleep 2
-goal( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.count.txt' ] )
+dep( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.count.txt' ] <- [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO02/KO02.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO03/KO03.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT01/WT01.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT02/WT02.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT03/WT03.star.featurecounts.count' ], cpus := 4, mem := 32*G, timeout := 72*hour, taskName := "deseq2.featurecounts.star.DLBC") sys bash /home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.call.deseq2.featurecounts.star.DLBC.sh; sleep 2
+goal( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.count.txt' ] )
 --
-dep( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/limma/featurecounts/star/DLBC.star.featurecounts.limma.count.txt' ] <- [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO02/KO02.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO03/KO03.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT01/WT01.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT02/WT02.star.featurecounts.count', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT03/WT03.star.featurecounts.count' ], cpus := 4, mem := 32*G, timeout := 72*hour, taskName := "limma.featurecounts.star.DLBC") sys bash /home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.call.limma.featurecounts.star.DLBC.sh; sleep 2
-goal( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/limma/featurecounts/star/DLBC.star.featurecounts.limma.count.txt' ] )
+dep( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/limma/featurecounts/star/DLBC.star.featurecounts.limma.count.txt' ] <- [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO02/KO02.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO03/KO03.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT01/WT01.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT02/WT02.star.featurecounts.count', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT03/WT03.star.featurecounts.count' ], cpus := 4, mem := 32*G, timeout := 72*hour, taskName := "limma.featurecounts.star.DLBC") sys bash /home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.call.limma.featurecounts.star.DLBC.sh; sleep 2
+goal( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/limma/featurecounts/star/DLBC.star.featurecounts.limma.count.txt' ] )
 ```
 
 This code chunk will invoke few bash scripts (e.g., example/DLBC/RNAseq/shell_scripts/**`run.call.edger.featurecounts.star.DLBC.sh`**, **`run.call.deseq2.featurecounts.star.DLBC.sh`**, and **`run.call.limma.featurecounts.star.DLBC.sh`**) to execute differential expression (DE) analysis using three the state-of-the-art tools  (i.e., [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html), [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html), and [limma](https://bioconductor.org/packages/release/bioc/html/limma.html)) on the example dataset of six samples from KO01 to WT03.
@@ -1100,15 +1100,17 @@ $ head example/DLBC/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts
 Or, the exploratory plots of the example dataset produced by DESeq2 will be as follows.
 
 1. An exploratory plot of the per-gene dispersion estimates together with the fitted mean-dispersion relationship
-    * <img src="result/DLBC.star.featurecounts.deseq2.plotDispEsts.pdf" alt="KO01_DispEsts"  width="600" height="600">
+    * <img src="IMG/DLBC.star.featurecounts.deseq2.plotDispEsts.png" alt="KO01_DispEsts"  width="600" height="600">
 2. An exploratory plot of row standard deviations versus row means using the normalized counts transformation (f(count + pc))
-    * <img src="result/DLBC.star.featurecounts.deseq2.count.ntd.meanSdPlot.pdf" alt="KO01_ntd_meanSd"  width="600" height="600">
+    * <img src="IMG/DLBC.star.featurecounts.deseq2.count.ntd.meanSdPlot.png" alt="KO01_ntd_meanSd"  width="600" height="600">
 3. An exploratory plot of row standard deviations versus row means using the variance stabilizing transformation
-    * <img src="result/DLBC.star.featurecounts.deseq2.count.rld.meanSdPlot.pdf" alt="KO01_rld_meanSd"  width="600" height="600">
+    * <img src="IMG/DLBC.star.featurecounts.deseq2.count.rld.meanSdPlot.png" alt="KO01_rld_meanSd"  width="600" height="600">
 4. An exploratory plot of row standard deviations versus row means using the 'regularized log' transformation
-    * <img src="result/DLBC.star.featurecounts.deseq2.count.vst.meanSdPlot.pdf" alt="KO01_vst_meanSd"  width="600" height="600">
-5. A scatter plot of log2 fold changes (on the y-axis) versus the mean of normalized counts (on the x-axis)
-    * <img src="result/DLBC.star.featurecounts.deseq2.plotMA.pdf" alt="KO01_plotMA"  width="600" height="600">
+    * <img src="IMG/DLBC.star.featurecounts.deseq2.count.vst.meanSdPlot.png" alt="KO01_vst_meanSd"  width="600" height="600">
+5. A MA plot of log2 fold changes (on the y-axis) versus the mean of normalized counts (on the x-axis)
+    * <img src="IMG/DLBC.star.featurecounts.deseq2.plotMA2.png" alt="KO01_plotMA"  width="600" height="600">
+6. A scatter plot of log2 fold changes (on the y-axis) versus the FDR (on the x-axis)
+    * <img src="IMG/DLBC.star.featurecounts.deseq2.plotMA.png" alt="KO01_plotMA"  width="600" height="600">
 
 
 
@@ -1134,8 +1136,8 @@ The BDS code snippet for the sample KO01 will look like:
 
 ```bash
 $ grep -A1 run.lociStat.featurecounts.star.DLBC.sh example/DLBC/Submit_RNAseq.DLBC.bds
-dep( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/DLBC.star.featurecounts.overlap.txt' ] <- [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC_full/RNAseq/DEG/edger/featurecounts/star/DLBC.star.featurecounts.edger.test.DEG.txt', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC_full/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.test.DEG.txt', '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC_full/RNAseq/DEG/limma/featurecounts/star/DLBC.star.featurecounts.limma.test.DEG.txt' ], cpus := 4, mem := 32*G, timeout := 72*hour, taskName := "lociStat.featurecounts.star.DLBC") sys bash /home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.lociStat.featurecounts.star.DLBC.sh; sleep 2
-goal( [ '/home/wchan10/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/DLBC.star.featurecounts.overlap.txt' ] )
+dep( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/DLBC.star.featurecounts.overlap.txt' ] <- [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC_full/RNAseq/DEG/edger/featurecounts/star/DLBC.star.featurecounts.edger.test.DEG.txt', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC_full/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.test.DEG.txt', '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC_full/RNAseq/DEG/limma/featurecounts/star/DLBC.star.featurecounts.limma.test.DEG.txt' ], cpus := 4, mem := 32*G, timeout := 72*hour, taskName := "lociStat.featurecounts.star.DLBC") sys bash /home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.lociStat.featurecounts.star.DLBC.sh; sleep 2
+goal( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/DLBC.star.featurecounts.overlap.txt' ] )
 ```
 
 This code chunk will invoke the bash script (e.g., example/DLBC/RNAseq/shell_scripts/**`run.lociStat.featurecounts.star.DLBC.sh`**) to collect DEG statistics and to make a Venn diagram plot.
@@ -1210,29 +1212,92 @@ $ cut -f1,2,4 example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/DLBC.star.fea
 
 There is a Venn diagram plot will be generated after this step.
 
-<img src="result/DLBC.star.featurecounts.VennDiagram.pdf" alt="DLBC_full_Venn"  width="600" height="600">
+<img src="IMG/DLBC.star.featurecounts.VennDiagram.png" alt="DLBC_full_Venn"  width="600" height="600">
 
 
 
 ### <a name="QuantQC"/>Step 5: Sample Correlation | [Top](#Top)
 
 
-TBC
+In this step, the pipeline will make a PCA plot based on the transcriptional profiling of all samples.
+
+The BDS code snippet for the sample KO01 will look like:
 
 
+```bash
+$ grep -A1 run.quantQC.pca.featurecounts.star.DLBC.sh example/DLBC/Submit_RNAseq.DLBC.bds
+dep( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/QuantQC/featurecounts/star/DLBC.star.featurecounts.pca.pdf' ] <- [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC_full/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.count.txt' ], cpus := 4, mem := 32*G, timeout := 72*hour, taskName := "pca.featurecounts.star.DLBC") sys bash /home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.quantQC.pca.featurecounts.star.DLBC.sh; sleep 2
+goal( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/QuantQC/featurecounts/star/DLBC.star.featurecounts.pca.pdf' ] )
+```
 
-### <a name="HeatMap"/>Step 6: HeatMap | [Top](#Top)
+This code chunk will invoke the bash script (e.g., example/DLBC/RNAseq/shell_scripts/**`run.quantQC.pca.featurecounts.star.DLBC.sh`**) to make a PCA plot based on the alignment quantification result generated by DESeq2 or one of DE analysis tools.
+
+After the completion of entire pipeline, you can check the PCA plot under the folder of `QuantQC/`.
+
+<img src="IMG/DLBC.star.featurecounts.pca.png" alt="DLBC_full_Venn"  width="600" height="600">
 
 
-TBC
+### <a name="HeatMap"/>Step 6: Heat Map | [Top](#Top)
+
+
+In this step, the pipeline will make a heat map based on the overlapping set of DEGs identified across differenet DE analysis tools.
+
+The BDS code snippet for the sample KO01 will look like:
+
+
+```bash
+$ grep -A1 run.postAna.pheatmap.featurecounts.star.DLBC.sh example/DLBC/Submit_RNAseq.DLBC.bds
+dep( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/PostAna/pheatmap/featurecounts/star/DLBC/DLBC.star.featurecounts.heatmap.pdf' ] <- [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/DLBC.star.featurecounts.overlap.txt' ], cpus := 1, mem := 8*G, timeout := 72*hour, taskName := "postAna.pheatmap.featurecounts.star.DLBC") sys bash /home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.postAna.pheatmap.featurecounts.star.DLBC.sh; sleep 2
+goal( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/PostAna/pheatmap/featurecounts/star/DLBC/DLBC.star.featurecounts.heatmap.pdf' ] )
+```
+
+This code chunk will invoke the bash script (e.g., example/DLBC/RNAseq/shell_scripts/**`run.postAna.pheatmap.featurecounts.star.DLBC.sh`**) to make a heat map plot based on the overlapping set of DEGs identified across differenet DE analysis tools (i.e., [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html), [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html), and [limma](https://bioconductor.org/packages/release/bioc/html/limma.html)).
+
+After the completion of entire pipeline, you can check the heat map under the folder of `PostAna/pheatmap`.
+
+<img src="IMG/DLBC.star.featurecounts.heatmap.png" alt="DLBC_full_Venn"  width="600" height="600">
 
 
 
 ### <a name="GSEA"/>Step 7: Functional Enrichment Analysis | [Top](#Top)
 
 
-TBC
+In this step, the pipeline will conduct enrichment analysis and make several exploratory plots based on the overlapping set of DEGs identified across differenet DE analysis tools.
 
+The BDS code snippet for the sample KO01 will look like:
+
+
+```bash
+$ grep -A1 run.postAna.clusterprofiler.featurecounts.star.DLBC.sh example/DLBC/Submit_RNAseq.DLBC.bds
+dep( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/PostAna/clusterprofiler/featurecounts/star/DLBC/DLBC.star.featurecounts.enrichGO.ALL.txt' ] <- [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/DLBC.star.featurecounts.overlap.txt' ], cpus := 1, mem := 8*G, timeout := 72*hour, taskName := "postAna.clusterprofiler.featurecounts.star.DLBC") sys bash /home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.postAna.clusterprofiler.featurecounts.star.DLBC.sh; sleep 2
+goal( [ '/home/USER/cri_rnaseq/cri_rnaseq_2018/example/DLBC/RNAseq/PostAna/clusterprofiler/featurecounts/star/DLBC/DLBC.star.featurecounts.enrichGO.ALL.txt' ] )
+```
+
+This code chunk will invoke the bash script (e.g., example/DLBC/RNAseq/shell_scripts/**`run.postAna.clusterprofiler.featurecounts.star.DLBC.shh`**) to conduct enrichment analyses including [GO](http://www.geneontology.org/) and [KEGG](https://www.genome.jp/kegg/) pathway erichment analyses as well as gene set enrichment analysis (GSEA).
+
+After the completion of entire pipeline, you can check the heat map under the folder of `PostAna/pheatmap`.
+
+
+```bash
+$ ls example/DLBC/RNAseq/PostAna/clusterprofiler/featurecounts/star/DLBC/
+DLBC.star.featurecounts.enrichGO.ALL.cnetplot.pdf    DLBC.star.featurecounts.enrichGSEAGO.ALL.neg001.pdf  DLBC.star.featurecounts.enrichKEGG.cnetplot.pdf
+DLBC.star.featurecounts.enrichGO.ALL.dotplot.pdf     DLBC.star.featurecounts.enrichGSEAGO.ALL.pos001.pdf  DLBC.star.featurecounts.enrichKEGG.dotplot.pdf
+DLBC.star.featurecounts.enrichGO.ALL.emapplot.pdf    DLBC.star.featurecounts.enrichGSEAGO.ALL.txt         DLBC.star.featurecounts.enrichKEGG.emapplot.pdf
+DLBC.star.featurecounts.enrichGO.ALL.txt             DLBC.star.featurecounts.enrichGSEAKEGG.pos001.pdf    DLBC.star.featurecounts.enrichKEGG.txt      run.GSEA.featurecounts.star.DLBC.log
+```
+
+Below, several plots will be generated based on the overlapping set of DEGs using [GO](http://www.geneontology.org/) database as example.
+
+1. An exploratory dot plot for enrichment result
+    * <img src="IMG/DLBC.star.featurecounts.enrichGO.ALL.dotplot.png" alt="DLBC_full_enrichGO.ALL.dotplot"  width="600" height="600">
+2. An exploratory enrichment map for enrichment result of over-representation test
+    * <img src="IMG/DLBC.star.featurecounts.enrichGO.ALL.emapplot.png" alt="DLBC_full_enrichGO.ALL.emapplot"  width="600" height="600">
+3. An exploratory Gene-Concept Network plot of over-representation test
+    * <img src="IMG/DLBC.star.featurecounts.enrichGO.ALL.cnetplot.png" alt="DLBC_full_enrichGO.ALL.cnetplot"  width="600" height="600">
+4. An exploratory plot of GSEA result with NES great than zero
+    * <img src="IMG/DLBC.star.featurecounts.enrichGSEAGO.ALL.pos001.png" alt="DLBC_full_enrichGSEAGO.ALL.pos001"  width="600" height="600">
+5. An exploratory plot of GSEA result with NES less than zero
+    * <img src="IMG/DLBC.star.featurecounts.enrichGSEAGO.ALL.neg001.png" alt="DLBC_full_enrichGSEAGO.ALL.neg001"  width="600" height="600">
 
 
 ## <a name="BDS"/>BigDataScript Report | [Top](#Top)
@@ -1243,7 +1308,7 @@ Considering the environment setting in the CRI HPC system, [BigDataScript](https
 
 After the completion of entire pipeline, you will see a BigDataScript report in HTML under the pipeline folder. For instance, this is the report from one test run. The graphic time line will tell you the execution time per sub-task script.
 
-<img src="result/Submit_RNAseq.DLBC.bds.20180725_151733_662.report.pdf" alt="KO01_plotMA"  width="800" height="600">
+<img src="IMG/Submit_RNAseq.DLBC.bds.20180725_151733_662.report.png" alt="KO01_plotMA"  width="800" height="600">
 
 
 ## <a name="Ref"/>Reference | [Top](#Top)

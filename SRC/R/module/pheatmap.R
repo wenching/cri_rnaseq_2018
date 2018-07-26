@@ -256,10 +256,12 @@ h <- pheatmap::pheatmap(
 )
 
 c.out.file.t.path <- args$c.out.file.path
-flog.debug(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
+flog.info(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
 
 pdf(c.out.file.t.path, width = 6, height = 8)
-h
+print(
+  h
+)
 dev.off()
 
 flog.info("PREPROCESS - DONE")

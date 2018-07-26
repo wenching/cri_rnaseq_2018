@@ -194,7 +194,7 @@ def make_master_bds(args, meta_data, project_cfg, task_cfg):
                     {'read_qc': {'KO01': {'SRR1205282': {'in_file_path_list': ['/group/bioinformatics/CRI_RNAseq_2018/example/data/WT01.test.fastq.gz'],
                                                          'log_file_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282/run.RawReadQC.FastQC.SRR1205282.log',
                                                          'out_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282',
-                                                         'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282/WT01.test_fastqc.zip'],
+                                                         'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282/SRR1205282_fastqc.zip'],
                                                          'shell_script_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Shell/run.RawReadQC.FastQC.SRR1205282.sh'}},
                                  'main': {'out_step_dir': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/RawReadQC'}}}
                     '''
@@ -1784,10 +1784,11 @@ goal( [ '{}' ] )
                     local_resource = ''
                     if args.system_type == 'cluster':
                         pbs_ppn = min([project_cfg['pipeline']['software'][caller]['threads'], args.threads])
-                        local_resource = ', cpus := {}, mem := {}*G, timeout := {}*hour, taskName := "postAna.{}.{}.{}"'.format(
+                        local_resource = ', cpus := {}, mem := {}*G, timeout := {}*hour, taskName := "postAna.{}.{}.{}.{}"'.format(
                             pbs_ppn,
                             pbs_ppn * 8,
                             72,
+                            tool,
                             quantifier,
                             aligner,
                             project_cfg['project']['name']

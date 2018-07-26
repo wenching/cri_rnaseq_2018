@@ -291,7 +291,7 @@ for(i.idx in seq_len(length(v.in.file.path))) {
   c.key <- "ENSEMBL"
   v.from <- gsub("\\.\\d+$", "", v.from)
   
-  df.key.2.feat <- try(clusterProfiler::bitr(geneID = v.from, fromType = c.key, toType = c("ENTREZID", "SYMBOL", "GENENAME"), OrgDb = c.org.db, drop = T))
+  df.key.2.feat <- try(clusterProfiler::bitr(geneID = v.from, fromType = c.key, toType = c("ENTREZID", "SYMBOL", "GENENAME"), OrgDb = c.org.db, drop = TRUE))
   
   i.idx.log2FC <- which(colnames(df.in.uniq) == "log2FoldChange")
   df.symb.2.log2FC <- data.frame("KEY" = v.from, "log2FC" = as.numeric(df.in.uniq[, i.idx.log2FC]))
@@ -347,7 +347,7 @@ for(i.idx in seq_len(length(lst.gene.id))) {
   
   
   (c.out.file.t.path <- args$c.out.file.path)
-  flog.debug(paste("SAVE GO enrichment list in", v.ont[c.ont], "to", c.out.file.t.path))
+  flog.info(paste("SAVE GO enrichment list in", v.ont[c.ont], "to", c.out.file.t.path))
   
   write.table(
     x = as.data.frame(enrichRes.go),
@@ -362,32 +362,38 @@ for(i.idx in seq_len(length(lst.gene.id))) {
   flog.debug(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
   
   pdf(file = c.out.file.t.path, width = 8, height = 6, onefile = F)
-  print(enrichplot::dotplot(
-    object = enrichRes.go,
-    font.size = 12, 
-    title = paste(c.name, c.ont, "GO")
-  ))
+  print(
+    enrichplot::dotplot(
+      object = enrichRes.go,
+      font.size = 12, 
+      title = paste(c.name, c.ont, "GO")
+    )
+  )
   dev.off()
   
   c.out.file.t.path <- gsub("\\.txt$", ".emapplot.pdf", args$c.out.file.path)
   flog.debug(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
   
-  pdf(file = c.out.file.t.path, width = 8, height = 8, onefile = T)
-  enrichplot::emapplot(
-    x = enrichRes.go,
-    showCategory = 10
+  pdf(file = c.out.file.t.path, width = 8, height = 8, onefile = TRUE)
+  print(
+    enrichplot::emapplot(
+      x = enrichRes.go,
+      showCategory = 10
+    )
   )
   dev.off()
   
   c.out.file.t.path <- gsub("\\.txt$", ".cnetplot.pdf", args$c.out.file.path)
   flog.debug(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
   
-  pdf(file = c.out.file.t.path, width = 8, height = 8, onefile = T)
-  enrichplot::cnetplot(
-    x = enrichRes.go,
-    showCategory = 5, 
-    foldChange = lst.gene.id[[i.idx]], 
-    layout = "kk"
+  pdf(file = c.out.file.t.path, width = 8, height = 8, onefile = TRUE)
+  print(
+    enrichplot::cnetplot(
+      x = enrichRes.go,
+      showCategory = 5, 
+      foldChange = lst.gene.id[[i.idx]], 
+      layout = "kk"
+    )
   )
   dev.off()
   
@@ -399,7 +405,7 @@ for(i.idx in seq_len(length(lst.gene.id))) {
   system.time(
     gseaRes.go <- try(
       clusterProfiler::gseGO(
-        geneList = sort(lst.gene.id[[c.name]], decreasing = T),
+        geneList = sort(lst.gene.id[[c.name]], decreasing = TRUE),
         ont = as.character(c.ont),
         OrgDb = c.org.db,
         keyType = c.keytype,
@@ -409,7 +415,7 @@ for(i.idx in seq_len(length(lst.gene.id))) {
   )
   
   c.out.file.t.path <- gsub("\\.enrichGO.ALL.txt$", ".enrichGSEAGO.ALL.txt", args$c.out.file.path)
-  flog.debug(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
+  flog.info(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
   
   write.table(
     x = as.data.frame(gseaRes.go),
@@ -420,38 +426,42 @@ for(i.idx in seq_len(length(lst.gene.id))) {
     col.names = TRUE
   )
   
-  (c.geneSetID <- head(subset(gseaRes.go@result, NES > 0)$ID, min(5, nrow(subset(gseaRes.go@result, NES > 0))))[1])
-  (c.top <- paste("pos", sprintf(fmt = "%03d", match(c.geneSetID, subset(gseaRes.go@result, NES > 0)$ID)), sep = ""))
+  c.geneSetID <- head(subset(gseaRes.go@result, NES > 0)$ID, min(5, nrow(subset(gseaRes.go@result, NES > 0))))[1]
+  c.top <- paste("pos", sprintf(fmt = "%03d", match(c.geneSetID, subset(gseaRes.go@result, NES > 0)$ID)), sep = "")
   
   c.out.file.t.path <- gsub("\\.enrichGO.ALL.txt$", paste0(".enrichGSEAGO.ALL.", c.top, ".pdf"), args$c.out.file.path)
-  flog.debug(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
+  flog.info(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
   
   pdf(file = c.out.file.t.path, width = 8, height = 6, onefile = F)
-  enrichplot::gseaplot(
-    x = gseaRes.go,
-    geneSetID = c.geneSetID,
-    by = "all",
-    title = c.geneSetID,
-    color.line = "red",
-    color.vline = "blue"
+  print(
+    enrichplot::gseaplot(
+      x = gseaRes.go,
+      geneSetID = c.geneSetID,
+      by = "all",
+      title = c.geneSetID,
+      color.line = "red",
+      color.vline = "blue"
+    )
   )
   dev.off()
   
   
-  (c.geneSetID <- head(subset(gseaRes.go@result, NES < 0)$ID, min(5, nrow(subset(gseaRes.go@result, NES < 0))))[1])
-  (c.top <- paste("neg", sprintf(fmt = "%03d", match(c.geneSetID, subset(gseaRes.go@result, NES < 0)$ID)), sep = ""))
+  c.geneSetID <- head(subset(gseaRes.go@result, NES < 0)$ID, min(5, nrow(subset(gseaRes.go@result, NES < 0))))[1]
+  c.top <- paste("neg", sprintf(fmt = "%03d", match(c.geneSetID, subset(gseaRes.go@result, NES < 0)$ID)), sep = "")
   
   c.out.file.t.path <- gsub("\\.enrichGO.ALL.txt$", paste0(".enrichGSEAGO.ALL.", c.top, ".pdf"), args$c.out.file.path)
-  flog.debug(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
+  flog.info(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
   
   pdf(file = c.out.file.t.path, width = 8, height = 6, onefile = F)
-  enrichplot::gseaplot(
-    x = gseaRes.go,
-    geneSetID = c.geneSetID,
-    by = "all",
-    title = c.geneSetID,
-    color.line = "green",
-    color.vline = "blue"
+  print(
+    enrichplot::gseaplot(
+      x = gseaRes.go,
+      geneSetID = c.geneSetID,
+      by = "all",
+      title = c.geneSetID,
+      color.line = "green",
+      color.vline = "blue"
+    )
   )
   dev.off()
   
@@ -471,7 +481,7 @@ for(i.idx in seq_len(length(lst.gene.id))) {
   )
   
   c.out.file.t.path <- gsub("\\.enrichGO.ALL.txt$", ".enrichKEGG.txt", args$c.out.file.path)
-  flog.debug(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
+  flog.info(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
   
   write.table(
     x = as.data.frame(enrichRes.kegg),
@@ -484,23 +494,27 @@ for(i.idx in seq_len(length(lst.gene.id))) {
   
   
   c.out.file.t.path <- gsub("\\.enrichGO.ALL.txt$", ".enrichKEGG.dotplot.pdf", args$c.out.file.path)
-  flog.debug(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
+  flog.info(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
   
   pdf(file = c.out.file.t.path, width = 8, height = 6, onefile = F)
-  enrichplot::dotplot(
-    object = enrichRes.kegg, 
-    font.size = 12, 
-    title = paste(c.name, "KEGG")
+  print(
+    enrichplot::dotplot(
+      object = enrichRes.kegg, 
+      font.size = 12, 
+      title = paste(c.name, "KEGG")
+    )
   )
   dev.off()
   
   
   c.out.file.t.path <- gsub("\\.enrichGO.ALL.txt$", ".enrichKEGG.emapplot.pdf", args$c.out.file.path)
-  flog.debug(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
+  flog.info(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
   
   pdf(file = c.out.file.t.path, width = 8, height = 6, onefile = F)
-  enrichplot::emapplot(
-    x = enrichRes.kegg
+  print(
+    enrichplot::emapplot(
+      x = enrichRes.kegg
+    )
   )
   dev.off()
   
@@ -522,18 +536,90 @@ for(i.idx in seq_len(length(lst.gene.id))) {
   enrichRes.kegg.t@result$geneID <- enrichRes.kegg.t@result$SYMBOL
 
   c.out.file.t.path <- gsub("\\.enrichGO.ALL.txt$", ".enrichKEGG.cnetplot.pdf", args$c.out.file.path)
-  flog.debug(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
+  flog.info(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
 
   pdf(file = c.out.file.t.path, width = 16, height = 16, onefile = F)
-  enrichplot::cnetplot(
-    x = enrichRes.kegg.t,
-    showCategory = 5,
-    foldChange = lst.gene.id[[i.idx]],
-    layout = "kk"
+  print(
+    enrichplot::cnetplot(
+      x = enrichRes.kegg.t,
+      showCategory = 5,
+      foldChange = lst.gene.id[[i.idx]],
+      layout = "kk"
+    )
   )
   dev.off()
   
   flog.debug(paste("KEGG over-representation test - DONE"))
+  
+  
+  flog.info(paste("KEGG Gene Set Enrichment Analysis in"))
+  
+  system.time(
+    gseaRes.kegg <- try(
+      clusterProfiler::gseKEGG(
+        geneList = sort(lst.gene.id[[c.name]], decreasing = TRUE),
+        organism = c.org.kegg,
+        keyType = c("kegg", "ncbi-geneid", "ncbi-proteinid", "uniprot")[1],
+        use_internal_data = FALSE,
+        verbose = T
+      )
+    )
+  )
+  
+  c.out.file.t.path <- gsub("\\.enrichGO.ALL.txt$", ".enrichGSEAKEGG.txt", args$c.out.file.path)
+  flog.info(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
+  
+  write.table(
+    x = as.data.frame(gseaRes.kegg),
+    file = c.out.file.t.path,
+    quote = TRUE,
+    sep = "\t",
+    row.names = FALSE,
+    col.names = TRUE
+  )
+  
+  c.geneSetID <- head(subset(gseaRes.kegg@result, NES > 0)$ID, min(5, nrow(subset(gseaRes.kegg@result, NES > 0))))[1]
+  c.top <- paste("pos", sprintf(fmt = "%03d", match(c.geneSetID, subset(gseaRes.kegg@result, NES > 0)$ID)), sep = "")
+  
+  c.out.file.t.path <- gsub("\\.enrichGO.ALL.txt$", paste0(".enrichGSEAKEGG.", c.top, ".pdf"), args$c.out.file.path)
+  flog.info(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
+  
+  pdf(file = c.out.file.t.path, width = 8, height = 6, onefile = F)
+  print(
+    enrichplot::gseaplot(
+      x = gseaRes.kegg,
+      geneSetID = c.geneSetID,
+      by = "all",
+      title = c.geneSetID,
+      color.line = "red",
+      color.vline = "blue"
+    )
+  )
+  dev.off()
+  
+  
+  c.geneSetID <- head(subset(gseaRes.kegg@result, NES < 0)$ID, min(5, nrow(subset(gseaRes.kegg@result, NES < 0))))[1]
+  if(! is.na(c.geneSetID)) {
+    c.top <- paste("neg", sprintf(fmt = "%03d", match(c.geneSetID, subset(gseaRes.kegg@result, NES < 0)$ID)), sep = "")
+    
+    c.out.file.t.path <- gsub("\\.enrichGO.ALL.txt$", paste0(".enrichGSEAKEGG.", c.top, ".pdf"), args$c.out.file.path)
+    flog.info(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
+    
+    pdf(file = c.out.file.t.path, width = 8, height = 6, onefile = F)
+    print(
+      enrichplot::gseaplot(
+        x = gseaRes.kegg,
+        geneSetID = c.geneSetID,
+        by = "all",
+        title = c.geneSetID,
+        color.line = "green",
+        color.vline = "blue"
+      )
+    )
+    dev.off()
+  }
+  
+  flog.debug(paste("GO Gene Set Enrichment Analysis in", v.ont[c.ont], "- DONE"))
 }
 
 
