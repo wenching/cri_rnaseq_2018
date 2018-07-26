@@ -19,7 +19,7 @@ This repository contains the following items:
 - ```example/``` - example data for running this pipeline
 - ```README.md``` - this description file
 - ```references/``` - a symbolic link to the genome database within CRI HPC system used in the example dataset
-- ```SRC/``` - automated pipelines for RNAseq analysis
+- ```SRC/``` - automatic pipelines for RNAseq analysis
 
 ### Prerequisites
 
