@@ -443,7 +443,7 @@ dev.off()
 mat.obj <- EList.voom
 
 
-c.out.file.t.path <- gsub("\\.count.txt$", ".count.ntd.meanSdPlot.pdf", args$c.out.file.path)
+c.out.file.t.path <- gsub("\\.count.txt$", ".count.voom.meanSdPlot.pdf", args$c.out.file.path)
 flog.debug(paste("OUT_FILE_PATH:", c.out.file.t.path, sep = "\t"))
 
 pdf(c.out.file.t.path, width = 8, height = 8)
