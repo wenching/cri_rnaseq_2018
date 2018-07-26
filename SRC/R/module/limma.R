@@ -296,7 +296,7 @@ if(args$c.appl == "RNAseq") {
 flog.debug("PREPROCESS - DONE")
 
 
-flog.info("limma: Empirical Analysis of Digital Gene Expression Data in R")
+flog.info("limma: Linear Models for Microarray Data")
 
 if(! "limma" %in% rownames(installed.packages())) {
   if(! "BiocManager" %in% rownames(installed.packages()))
