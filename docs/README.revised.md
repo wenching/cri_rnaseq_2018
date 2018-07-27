@@ -574,14 +574,12 @@ The login procedure varies slightly depending on whether you use a Mac/Unix/Linu
             |       `-- SRR1205287
             `-- shell_scripts
         ```
-* Execute the entire analysis by just one command
-    + 
-        
-        ```bash
-        # This will start to run the entire pipeline.  
-        # You can chekc teh BDS report to know the running status.
-        $ bash example/DLBC/Submit_RNAseq.DLBC.sh
-        ```
+* Execute the entire analysis by just one command  
+    ```bash
+    # This will start to run the entire pipeline.  
+    # You can chekc teh BDS report to know the running status.
+    $ bash example/DLBC/Submit_RNAseq.DLBC.sh
+    ```
     + Again, this step will execute the master BigDataScript script example/DLBC/**`Submit_RNAseq.DLBC.bds`**, so you will need to run this command <span style="color:red">**on a head/entry node**</span>.
 
 
