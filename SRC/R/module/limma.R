@@ -33,7 +33,11 @@ rm(list = ls())
 
 if(! "futile.logger" %in% rownames(installed.packages())) {
   if(! "devtools" %in% rownames(installed.packages())) {
-    install.packages("devtools", dependencies = TRUE)
+    install.packages(
+      "devtools",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   }
   
   library("devtools")
@@ -300,7 +304,11 @@ flog.info("limma: Linear Models for Microarray Data")
 
 if(! "limma" %in% rownames(installed.packages())) {
   if(! "BiocManager" %in% rownames(installed.packages()))
-    install.packages("BiocManager")
+    install.packages(
+      "BiocManager",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   BiocManager::install("limma", version = "devel")
 }
 library("limma") # help(package = "limma") # ls(pos = "package:limma")
@@ -364,7 +372,11 @@ mat.design <- stats::model.matrix( ~ 0 + Group, df.meta.tbl)
 
 if(! "edgeR" %in% rownames(installed.packages())) {
   if(! "BiocManager" %in% rownames(installed.packages()))
-    install.packages("BiocManager")
+    install.packages(
+      "BiocManager",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   BiocManager::install("edgeR", version = "devel")
 }
 library("edgeR") # help(package = "edgeR") # ls(pos = "package:edgeR")

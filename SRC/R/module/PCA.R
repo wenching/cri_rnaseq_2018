@@ -33,7 +33,11 @@ rm(list = ls())
 
 if(! "futile.logger" %in% rownames(installed.packages())) {
   if(! "devtools" %in% rownames(installed.packages())) {
-    install.packages("devtools", dependencies = TRUE)
+    install.packages(
+      "devtools",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   }
   
   library("devtools")
@@ -248,7 +252,11 @@ flog.info("MAKE PCA plot")
 if(all(df.expr >= 0)) df.epxr.log <- log(df.expr + 1)
 
 if(! "FactoMineR" %in% rownames(installed.packages())) {
-  install.packages("FactoMineR", dependencies = TRUE)
+  install.packages(
+    "FactoMineR",
+    dependencies = TRUE,
+    repos = "https://cloud.r-project.org"
+  )
 }
 library("FactoMineR")
 
@@ -263,7 +271,11 @@ system.time(
 
 
 if(! "factoextra" %in% rownames(installed.packages())) {
-  install.packages("factoextra", dependencies = TRUE)
+  install.packages(
+    "factoextra",
+    dependencies = TRUE,
+    repos = "https://cloud.r-project.org"
+  )
 }
 library("factoextra")
 

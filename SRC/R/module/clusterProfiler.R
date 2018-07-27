@@ -32,7 +32,11 @@ rm(list = ls())
 
 if(! "futile.logger" %in% rownames(installed.packages())) {
   if(! "devtools" %in% rownames(installed.packages())) {
-    install.packages("devtools", dependencies = TRUE)
+    install.packages(
+      "devtools",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   }
   
   library("devtools")
@@ -213,7 +217,11 @@ flog.info(paste("DETERMINE OrgDb:\t", c.org.db <- 'org.Hs.eg.db'))
 
 if(! c.org.db %in% rownames(installed.packages())) {
   if(! "BiocManager" %in% rownames(installed.packages()))
-    install.packages("BiocManager")
+    install.packages(
+      "BiocManager",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   BiocManager::install(c.org.db, version = "devel")
 }
 
@@ -222,19 +230,31 @@ flog.info(paste("DETERMINE TxDb:\t", c.txdb <- 'TxDb.Hsapiens.UCSC.hg38.knownGen
 
 if(! c.txdb %in% rownames(installed.packages())) {
   if(! "BiocManager" %in% rownames(installed.packages()))
-    install.packages("BiocManager")
+    install.packages(
+      "BiocManager",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   BiocManager::install(c.txdb, version = "devel")
 }
 
 if(! "TxDb.Hsapiens.UCSC.hg19.knownGene" %in% rownames(installed.packages())) {
   if(! "BiocUpgrade" %in% rownames(installed.packages())) {
     if(! "BiocManager" %in% rownames(installed.packages()))
-      install.packages("BiocManager")
+      install.packages(
+        "BiocManager",
+        dependencies = TRUE,
+        repos = "https://cloud.r-project.org"
+      )
     BiocManager::install("TxDb.Hsapiens.UCSC.hg19.knownGene", version = "devel")
   }
   
   if(! "devtools" %in% rownames(installed.packages())) {
-    install.packages("devtools", dependencies = TRUE)
+    install.packages(
+      "devtools",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   }
   library(devtools)
   
@@ -253,7 +273,11 @@ clusterProfiler::idType(OrgDb = c.org.db)
 
 if(! "KEGGREST" %in% rownames(installed.packages())) {
   if(! "BiocManager" %in% rownames(installed.packages()))
-    install.packages("BiocManager")
+    install.packages(
+      "BiocManager",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   BiocManager::install("KEGGREST", version = "devel")
 }
 library("KEGGREST")

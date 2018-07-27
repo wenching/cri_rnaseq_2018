@@ -32,7 +32,11 @@ rm(list = ls())
 
 if(! "futile.logger" %in% rownames(installed.packages())) {
   if(! "devtools" %in% rownames(installed.packages())) {
-    install.packages("devtools", dependencies = TRUE)
+    install.packages(
+      "devtools",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   }
   
   library("devtools")
@@ -245,7 +249,11 @@ df.expr.vst.subset.scaled <- as.data.frame.matrix(
 colnames(df.expr.vst.subset.scaled) <- colnames(df.expr.vst.subset)
 
 if(! "pheatmap" %in% rownames(installed.packages())) {
-  install.packages("pheatmap", dependencies = TRUE)
+  install.packages(
+    "pheatmap",
+    dependencies = TRUE,
+    repos = "https://cloud.r-project.org"
+  )
 }
 library("pheatmap")
 
