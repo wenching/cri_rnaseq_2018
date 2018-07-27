@@ -33,7 +33,11 @@ rm(list = ls())
 
 if(! "futile.logger" %in% rownames(installed.packages())) {
   if(! "devtools" %in% rownames(installed.packages())) {
-    install.packages("devtools", dependencies = TRUE)
+    install.packages(
+      "devtools",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   }
   
   library("devtools")
@@ -200,9 +204,15 @@ flog.info("PREPROCESS")
 
 if(! "Biobase" %in% rownames(installed.packages())) {
   if(! "BiocManager" %in% rownames(installed.packages()))
-    install.packages("BiocManager")
+    install.packages(
+      "BiocManager",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
+    
   BiocManager::install("Biobase", version = "devel")
 }
+librar("Biobase")
 
 
 v.in.file.path <- unlist(strsplit(x = args$c.v.in.file.path, split = ","))
@@ -315,7 +325,11 @@ if(! "Vennerable" %in% rownames(installed.packages())) {
   }
   
   if(! "devtools" %in% rownames(installed.packages())) {
-    install.packages("devtools", dependencies = TRUE)
+    install.packages(
+      "devtools",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   }
   library("devtools")
   
@@ -393,7 +407,11 @@ write.table(
 
 
 if(! "VennDiagram" %in% rownames(installed.packages())) {
-  install.packages("VennDiagram", dependencies = TRUE)
+  install.packages(
+    "VennDiagram",
+    dependencies = TRUE,
+    repos = "https://cloud.r-project.org"
+  )
 }
 library("VennDiagram")
 

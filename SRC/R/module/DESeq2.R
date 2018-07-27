@@ -33,7 +33,11 @@ rm(list = ls())
 
 if(! "futile.logger" %in% rownames(installed.packages())) {
   if(! "devtools" %in% rownames(installed.packages())) {
-    install.packages("devtools", dependencies = TRUE)
+    install.packages(
+      "devtools",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   }
   
   library("devtools")
@@ -299,7 +303,11 @@ flog.info("DESeq2: Differential gene expression analysis based on the negative b
 
 if(! "DESeq2" %in% rownames(installed.packages())) {
   if(! "BiocManager" %in% rownames(installed.packages()))
-    install.packages("BiocManager")
+    install.packages(
+      "BiocManager",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   BiocManager::install("DESeq2", version = "devel")
 }
 library("DESeq2") # help(package = "DESeq2") # ls(pos = "package:DESeq2")
@@ -423,11 +431,19 @@ DESeqTransform.rld <- DESeq2::rlog(DESeqDS.sizeFact.estiDisp.NBTest, blind = FAL
 
 if(! "vsn" %in% rownames(installed.packages())) {
   if(! "hexbin" %in% rownames(installed.packages())) {
-    install.packages("hexbin", dependencies = TRUE)
+    install.packages(
+      "hexbin",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   }
   
   if(! "BiocManager" %in% rownames(installed.packages()))
-    install.packages("BiocManager")
+    install.packages(
+      "BiocManager",
+      dependencies = TRUE,
+      repos = "https://cloud.r-project.org"
+    )
   BiocManager::install("vsn", version = "devel")
 }
 library("vsn") # help(package = "vsn") # ls(pos = "package:vsn")
