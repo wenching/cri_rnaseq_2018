@@ -10,17 +10,13 @@ package: cri_rnaseq_2018
 
 
 
-```
-## Warning: package 'dplyr' was built under R version 3.5.1
-```
-
----
+<!--
 * Notes
     - add [MultiQC](http://multiqc.info/)
     - change grch38/hg38
-    - incoperate other pipeline (ChIP-seq, WGBS, WGS/WXS)
+    - incorporate other pipeline (ChIP-seq, WGBS, WGS/WXS)
     - Docker + WDL/CWL
----
+-->
 
 
 ## <a name="Top"/>
@@ -47,9 +43,9 @@ package: cri_rnaseq_2018
 
 The [Center for Research Informatics](http://cri.uchicago.edu/) (CRI) provides computational resources and expertise in biomedical informatics for researchers in the Biological Sciences Division (BSD) of the University of Chicago. 
 
----
+<!--
 This workshop is part of a series of [monthly training events](http://cri.uchicago.edu/seminar-series/) focusing on using the University of Chicago’s computational resources to analyze Next-Generation Sequencing and Microarray data.
----
+-->
 
 As a [bioinformatics core](http://cri.uchicago.edu/bioinformatics/), we are actively improving our pipelines and expanding pipeline functions. The tutorials will be updated in a timely manner but may not reflect the newest updates of the pipelines. Stay tuned with us for the latest pipeline release.
 
@@ -457,8 +453,8 @@ The login procedure varies slightly depending on whether you use a Mac/Unix/Linu
         echo "END" `date`
         ```
         
-        >   
-        > Basically, when running on your own dataset, you will need to modify this master pipeline script (i.e., <span style="color:red">`Build_RNAseq.DLBC.sh`</span>) accordingly.    
+        > 
+        > Basically, when running on your own dataset, you will need to modify this master pipeline script (i.e., <span style="color:red">`Build_RNAseq.DLBC.sh`</span>) accordingly.  
         >   
         > For instance, you can change respective parameters as follows.  
         >     - project="MY_OWN_DATA_SET"  
@@ -471,10 +467,11 @@ The login procedure varies slightly depending on whether you use a Mac/Unix/Linu
 
 * Before running, you need to know
 
-    >   
-    > The master BigDataScript script can be <span style="color:red">`ONLY run on a head/entry node`</span> other than any other compuatation node.  
-    > But, you can step by step run individual sub-task bash scripts in any computation node interactively.  
-    >   
+    > 
+    > The master BigDataScript script can be <span style="color:red">`ONLY run on a head/entry node`</span> other than any other compuatation node.
+    > 
+    > But, you can step by step run individual sub-task bash scripts in any computation node interactively.
+    > 
 
 * Generate necessary sub-task scripts
     + 
@@ -578,7 +575,6 @@ The login procedure varies slightly depending on whether you use a Mac/Unix/Linu
             `-- shell_scripts
         ```
 * Execute the entire analysis by just one command  
-    
     ```bash
     # This will start to run the entire pipeline.  
     # You can chekc teh BDS report to know the running status.
@@ -1168,9 +1164,9 @@ Or, the exploratory plots of the example dataset produced by DESeq2 will be as f
 
 > 
 > 
-> To demonstrate the full power of the following analyses, the pipeline will use the pre-run count tables and DEG lists from the full sequencing datasets.  
-> Please make sure that there is no any changes on the metadata file (i.e., <span style="color:red">```example/DLBC/DLBC.metadata.txt```</span>).  
-> Otherwise, it will be considered as not running for practice and should expect the following results not be the same as shown here.  
+> To demonstrate the full power of the following analyses, the pipeline will use the pre-run count tables and DEG lists from the full sequencing datasets.
+> Please make sure that there is no any changes on the metadata file (i.e., <span style="color:red">```example/DLBC/DLBC.metadata.txt```</span>).
+> Otherwise, it will be considered as not running for practice and should expect the following results not be the same as shown here.
 > 
 > 
 
