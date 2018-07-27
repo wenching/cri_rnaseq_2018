@@ -44,9 +44,9 @@ CRI RNA-seq Pipeline 2018
 
 The [Center for Research Informatics](http://cri.uchicago.edu/) (CRI) provides computational resources and expertise in biomedical informatics for researchers in the Biological Sciences Division (BSD) of the University of Chicago. 
 
----
+<!--
 This workshop is part of a series of [monthly training events](http://cri.uchicago.edu/seminar-series/) focusing on using University of Chicago’s computational resources to analyze Next-Generation Sequencing and Microarray data.
----
+-->
 
 As a [bioinformatics core](http://cri.uchicago.edu/bioinformatics/), we are actively improving our pipelines and expanding pipeline functions. The tutorials will be updated in a timely manner but may not reflect the newest updates of the pipelines. Stay tuned with us for the latest pipeline release.
 
@@ -84,6 +84,7 @@ In this tutorial, you will learn how to use the CRI's RNA-seq pipeline (availabl
 * Measure alignment result using [Picard](https://broadinstitute.github.io/picard/) and [RSeQC](http://rseqc.sourceforge.net/)
 * Quantify expression using [Subread](http://subread.sourceforge.net/)::[featureCounts](http://bioinf.wehi.edu.au/featureCounts/)
 * Identify differentially expressed genes using [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html), [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html), [limma](https://bioconductor.org/help/search/index.html?q=limma/)
+* Heat Map using [pheatmap](https://cran.r-project.org/web/packages/pheatmap/index.html)
 * Conduct functional enrichment analysis using [clusterProfiler](https://bioconductor.org/packages/release/bioc/html/clusterProfiler.html)
 
 By the end of this tutorial, you will:
@@ -268,7 +269,7 @@ Their respective sample information is described in the meta data table example/
 > 
 
 > 
-> For the persepctive of running as practice, here we use a subset of the human genome **`GRCh38.primary_Gencode24_50bp_chr11`** for Steps 1~4, and the complete information for [Step 5](#GSEA)
+> For the persepctive of running as practice, here we use a subset of the human genome **`GRCh38.primary_Gencode24_50bp_chr11`** for Steps 1~4, and the complete information after [Step 5](#GSEA)
 > 
 
 
@@ -413,7 +414,7 @@ The login procedure varies slightly depending on whether you use a Mac/Unix/Linu
                   fastq_format: 33
                   genome_assembly: grch38
             ```
-        > When running on another data set, you need <span style="color:red">`to modify these two file accordingly`</span>.
+        > When running this pipeline on another data set, you need to modify these <span style="color:red">`two files`</span> & the master pipeline script (i.e., <span style="color:red">`Build_RNAseq.DLBC.sh`</span>)accordingly.
 
 
 ## <a name="Steps"/>Pipeline Steps | [Top](#Top)
