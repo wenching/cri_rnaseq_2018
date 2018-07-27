@@ -32,10 +32,17 @@ This repository contains the following items:
 ### Installing
 
 ```bash
+# download the package
+git clone git@github.com:wenching/cri_rnaseq_2018.git
+
+# change working directory to the package directory
+cd cri_rnaseq_2018
+
 # load modules
 $ module purge;module load gcc udunits python/3.6.0 R; module update
 
-# this step is optional but it will install all necessary R packages ahead.
+# This step is optional but it will install all necessary R packages ahead.
+# In case the pipeline was terminated due to the failure of R package installation later when running the pipeline.
 $ Rscript --vanilla /group/bioinformatics/cri_rnaseq_2018/SRC/R/util/prerequisite.packages.R
 
 # create directories and generate all necessary scripts
@@ -66,6 +73,6 @@ This project is licensed under the [LGPLv3](https://www.gnu.org/licenses/lgpl-3.
 ## Acknowledgments
 
 * Thank [Kyle Hernandez](https://github.com/kmhernan) for providing a private Git repository in the begining of this project
-* Thank [Riyue Bao](https://github.com/riyuebao) for providing tutorial dataset, figures, and the pipeline of the Perl version
+* Thank [Riyue Bao](https://github.com/riyuebao) for providing tutorial dataset, figures, and the pipeline in the Perl version
 * Thank [PurpleBooth](https://gist.github.com/PurpleBooth) for providing the templates of [README.md](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) & [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426)
 

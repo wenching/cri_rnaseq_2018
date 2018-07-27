@@ -471,7 +471,8 @@ The login procedure varies slightly depending on whether you use a Mac/Unix/Linu
         # load modules
         $ module purge;module load gcc udunits python/3.6.0 R; module update
         
-        # this step is optional but it will install all necessary R packages ahead.
+        # This step is optional but it will install all necessary R packages ahead.
+        # In case the pipeline was terminated due to the failure of R package installation later when running the pipeline.
         $ Rscript --vanilla /group/bioinformatics/cri_rnaseq_2018/SRC/R/util/prerequisite.packages.R
         
         # create directories and generate all necessary scripts
