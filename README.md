@@ -43,7 +43,7 @@ $ module purge;module load gcc udunits python/3.6.0 R; module update
 
 # This step is optional but it will install all necessary R packages ahead.
 # In case the pipeline was terminated due to the failure of R package installation later when running the pipeline.
-$ Rscript --vanilla /group/bioinformatics/cri_rnaseq_2018/SRC/R/util/prerequisite.packages.R
+$ Rscript --vanilla SRC/R/util/prerequisite.packages.R
 
 # create directories and generate all necessary scripts
 $ bash Build_RNAseq.DLBC.sh
