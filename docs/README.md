@@ -1,30 +1,27 @@
----
 title: "Analyzing Illumina RNA-seq Data with the CRI HPC"
 author: '[Wen-Ching Chan](http://cri.uchicago.edu/people/#chan)'
 date: "July, 2018"
 output:
   html_document:
     keep_md: yes
-package: CRI_RNAseq_2018
----
+package: cri_rnaseq_2018
 
 
-
-```
-## Warning: package 'dplyr' was built under R version 3.5.1
-```
+CRI RNA-seq Pipeline 2018
 
 ---
 * Notes
     - add [MultiQC](http://multiqc.info/)
-    - change grch38 to hg38
+    - grch38/hg38
+    - incoperate other pipeline (ChIP-seq, WGBS, WGS/WXS)
+    - Docker + WDL/CWL
 ---
 
 
 ## <a name="Top"/>
 
 
-## CRI RNAseq Pipelines
+## CRI RNA-seq Pipelines
 - [CRI-RNAseq-2016](https://github.com/riyuebao/CRI-Workshop-Nov2016-RNAseq/blob/master/Run_RNAseq.tutorial.ipynb) by [Riyue Bao](http://cri.uchicago.edu/people/#bao). Last modified on **November 12, 2016**.
 - [CRI-RNAseq-2014](https://wiki.uchicago.edu/pages/viewpage.action?pageId=95855827) by [Lei Huang](http://cri.uchicago.edu/people/#huang). Last modified on **Apr 29, 2014**.
 
