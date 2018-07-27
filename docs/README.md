@@ -486,9 +486,6 @@ The login procedure varies slightly depending on whether you use a Mac/Unix/Linu
     
     # create directories and generate all necessary scripts
     $ bash Build_RNAseq.DLBC.sh
-    
-    # run the entire pipeline with just this command
-    $ bash example/DLBC/Submit_RNAseq.DLBC.sh
     ```
     
     + this step will execute **`SRC/Python/build_rnaseq.py`** using python3 to generate all sub-task bash scripts and directories according to the provided metadata and configuration files (i.e., example/**`DLBC.metadata.txt`** and example/**`DLBC.pipeline.yaml`** )
@@ -585,7 +582,7 @@ The login procedure varies slightly depending on whether you use a Mac/Unix/Linu
             |       `-- SRR1205287
             `-- shell_scripts
         ```
-* Execute the entire analysis by just one command  
+* Execute the entire analysis with just one command  
     
     ```bash
     # This will start to run the entire pipeline.  
