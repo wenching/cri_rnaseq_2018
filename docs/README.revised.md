@@ -456,7 +456,7 @@ The login procedure varies slightly depending on whether you use a Mac/Unix/Linu
         > 
         > Basically, when running on your own dataset, you will need to modify this master pipeline script (i.e., <span style="color:red">`Build_RNAseq.DLBC.sh`</span>) accordingly.  
         >   
-        > For instance, change respective parameters as follows.  
+        > For instance, you can change respective parameters as follows.  
         >     - project="MY_OWN_DATA_SET"  
         >     - padding="" # In this case, the project pipeline scripts will be generated under the same directory of the master pipeline script, instead of being under a named sub-directory (e.g., example/ in this tutorial).  
         >   
