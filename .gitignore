@@ -12,6 +12,7 @@ bds.pid.*
 log.txt
 *_test_args.R
 .Rhistory
+*.bak
 
 # C extensions
 *.so
