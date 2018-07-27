@@ -217,5 +217,5 @@ cat("# INSTALL NECESSARY PACKAGES - DONE")
 
 
 
-print(session_info())
+print(sessionInfo())
 q(save = "no")
