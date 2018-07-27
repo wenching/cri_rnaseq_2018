@@ -32,7 +32,7 @@ This repository contains the following items:
 ### Installing
 
 ```
-git clone git://github.com/wenching/cri_rnaseq_2018.git
+git clone git@github.com:wenching/cri_rnaseq_2018.git
 cd cri_rnaseq_2018
 module purge; module load gcc python/3.6.0; module update
 bash Build_RNAseq.DLBC.sh
