@@ -5,12 +5,11 @@
 now=$(date +"%m-%d-%Y_%H:%M:%S")
 
 ## project info
-project=DLBC
+project="DLBC"
 SubmitRNAseqExe="Submit_RNAseq.$project.sh"
 padding="example/"
 
 ## command
-echo "START" `date`
 echo "START" `date` " Running build_rnaseq.py"
 python3 SRC/Python/build_rnaseq.py \
 	--projdir $PWD/${padding}$project \
