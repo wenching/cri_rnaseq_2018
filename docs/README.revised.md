@@ -10,10 +10,6 @@ package: cri_rnaseq_2018
 
 
 
-```
-## Warning: package 'dplyr' was built under R version 3.5.1
-```
-
 <!--
 * Notes
     - add [MultiQC](http://multiqc.info/)
