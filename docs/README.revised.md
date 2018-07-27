@@ -458,7 +458,7 @@ The login procedure varies slightly depending on whether you use a Mac/Unix/Linu
         >   
         > For instance, you can change respective parameters as follows.  
         >     - project="MY_OWN_DATA_SET"  
-        >     - padding="" # In this case, the project pipeline scripts will be generated under the same directory of the master pipeline script, instead of being under a named sub-directory (e.g., example/ in this tutorial).  
+        >     - padding="" # In this case, the project pipeline scripts will be generated and saved under the same directory of the master pipeline script, instead of being under a named sub-directory (e.g., example/ in this tutorial).  
         >   
 
 
@@ -578,6 +578,8 @@ The login procedure varies slightly depending on whether you use a Mac/Unix/Linu
     + 
         
         ```bash
+        # This will start to run the entire pipeline.  
+        # You can chekc teh BDS report to know the running status.
         $ bash example/DLBC/Submit_RNAseq.DLBC.sh
         ```
     + Again, this step will execute the master BigDataScript script example/DLBC/**`Submit_RNAseq.DLBC.bds`**, so you will need to run this command <span style="color:red">**on a head/entry node**</span>.
