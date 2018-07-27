@@ -11,13 +11,13 @@ package: cri_rnaseq_2018
 
 CRI RNA-seq Pipeline 2018
 
----
+<!--
 * Notes
     - add [MultiQC](http://multiqc.info/)
     - grch38/hg38
     - incoperate other pipeline (ChIP-seq, WGBS, WGS/WXS)
     - Docker + WDL/CWL
----
+-->
 
 
 ## <a name="Top"/>
