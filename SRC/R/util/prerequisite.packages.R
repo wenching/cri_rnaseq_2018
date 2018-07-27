@@ -1,4 +1,4 @@
-cat("# INSTALL NECESSARY PACKAGES FIRST")
+cat("# INSTALL NECESSARY PACKAGES - START")
 
 
 if(! "futile.logger" %in% rownames(installed.packages())) {
@@ -211,6 +211,9 @@ if(! "pheatmap" %in% rownames(installed.packages())) {
     repos = "https://cloud.r-project.org"
   )
 }
+
+
+cat("# INSTALL NECESSARY PACKAGES - DONE")
 
 
 
