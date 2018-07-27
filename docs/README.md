@@ -355,22 +355,6 @@ The login procedure varies slightly depending on whether you use a Mac/Unix/Linu
         `-- references
             `-- GRCh38.primary_Gencode24_50bp_chr11
         ```
-    4. Generate sub-task scirpts of the pipepline  
-        
-        ```bash
-        # load modules
-        $ module purge;module load gcc udunits python/3.6.0 R; module update
-        
-        # This step is optional but it will install all necessary R packages ahead.
-        # In case the pipeline was terminated due to the failure of R package installation later when running the pipeline.
-        $ Rscript --vanilla SRC/R/util/prerequisite.packages.R
-        
-        # create directories and generate all necessary scripts
-        $ bash Build_RNAseq.DLBC.sh
-        
-        # run the entire pipeline with just this command
-        $ bash example/DLBC/Submit_RNAseq.DLBC.sh
-        ```
 
 * File structure  
     - Raw sequencing data files (*.fastq.gz) are located at **`example/data/`**  
@@ -490,13 +474,23 @@ The login procedure varies slightly depending on whether you use a Mac/Unix/Linu
     > But, you can step by step run individual sub-task bash scripts in any computation node interactively.  
     >   
 
-* Generate necessary sub-task scripts
-    + 
-        
-        ```bash
-        $ module purge; module load gcc python/3.6.0; module update
-        $ bash Build_RNAseq.DLBC.sh
-        ```
+* Generate sub-task scirpts of the pipepline  
+    
+    ```bash
+    # load modules
+    $ module purge;module load gcc udunits python/3.6.0 R; module update
+    
+    # This step is optional but it will install all necessary R packages ahead.
+    # In case the pipeline was terminated due to the failure of R package installation later when running the pipeline.
+    $ Rscript --vanilla SRC/R/util/prerequisite.packages.R
+    
+    # create directories and generate all necessary scripts
+    $ bash Build_RNAseq.DLBC.sh
+    
+    # run the entire pipeline with just this command
+    $ bash example/DLBC/Submit_RNAseq.DLBC.sh
+    ```
+    
     + this step will execute **`SRC/Python/build_rnaseq.py`** using python3 to generate all sub-task bash scripts and directories according to the provided metadata and configuration files (i.e., example/**`DLBC.metadata.txt`** and example/**`DLBC.pipeline.yaml`** )
         
         ```bash
