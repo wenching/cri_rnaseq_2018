@@ -1,3 +1,4 @@
+---
 title: "Analyzing Illumina RNA-seq Data with the CRI HPC"
 author: '[Wen-Ching Chan](http://cri.uchicago.edu/people/#chan)'
 date: "July, 2018"
@@ -5,6 +6,7 @@ output:
   html_document:
     keep_md: yes
 package: cri_rnaseq_2018
+---
 
 
 CRI RNA-seq Pipeline 2018
