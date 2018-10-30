@@ -7,12 +7,14 @@ __pycache__/
 Submit_RNAseq.DLBC.bds.*
 example/
 git_push.sh
+gitignore.txt
 *.wp[ru]
 bds.pid.*
 log.txt
 *_test_args.R
 .Rhistory
 *.bak
+._*
 
 # C extensions
 *.so
