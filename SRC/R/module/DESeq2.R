@@ -4,11 +4,11 @@
 #' 
 #' run DESeq2
 #' 
-#' @param metaData character. meta data file
+#' @param metadata character. meta data file
 #' @param GTF character. GTF file
 #' @param inPath character vector. input
 #' @param outPath character vector. output
-#' @usage callLoci::DESeq2(metaData, GTF, inPath, ...)
+#' @usage callLoci::DESeq2(metadata, GTF, inPath, ...)
 #' @return NULL
 #' @details TBC
 #' @note TBC
@@ -104,12 +104,12 @@ parser <- argparse::ArgumentParser(
 )
 
 parser$add_argument(
-  '--metaData',
-  dest = "c.meta.data.path",
+  '--metadata',
+  dest = "c.metadata.path",
   type = "character", # c('logical', 'integer', 'double', 'character')
   required = TRUE,
   help = "meta data file (default: required arg)",
-  metavar = "META_DATA"
+  metavar = "METADATA"
 )
 
 parser$add_argument(
@@ -270,17 +270,19 @@ flog.debug("PARSE arguments - DONE")
 
 flog.info("PREPROCESS")
 
-if(! file.exists(args$c.meta.data.path)) {
-  flog.error(paste("CANNOT find meta data file with", args$c.meta.data.path)); print(sessionInfo()); q(save = "no")
+if(! file.exists(args$c.metadata.path)) {
+  flog.error(paste("CANNOT find meta data file with", args$c.metadata.path)); print(sessionInfo()); q(save = "no")
 }
 df.meta.tbl <- read.csv(
-  args$c.meta.data.path,
+  args$c.metadata.path,
   header = TRUE,
   sep = "\t",
   check.names = FALSE,
   comment.char = "#",
   stringsAsFactors = FALSE
 )
+
+df.meta.tbl <- df.meta.tbl[! duplicated(df.meta.tbl$Library), ]
 
 if(args$c.appl == "RNAseq") {
   v.in.file.path <- list.files(

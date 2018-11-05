@@ -51,7 +51,7 @@ def edger(args, sw_cfg, task_cfg):
     
     cmd_list.append('''{} \\
 {} \\
---metaData="{}" \\
+--metadata="{}" \\
 --GTF="{}" \\
 --inPath="{}" \\
 --outPath="{}" \\
@@ -66,7 +66,7 @@ def edger(args, sw_cfg, task_cfg):
 \n'''.format(
          sw_cfg_edger['exe'],
          sw_cfg_edger['script'],
-         task_cfg_edger['meta_data_path'],
+         task_cfg_edger['metadata_path'],
          task_cfg_reference['anno_gtf'],
          task_cfg_edger['in_dir_path'],
          task_cfg_edger['out_file_path_list'][0],

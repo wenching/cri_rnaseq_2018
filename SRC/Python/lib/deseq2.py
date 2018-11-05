@@ -51,7 +51,7 @@ def deseq2(args, sw_cfg, task_cfg):
     
     cmd_list.append('''{} \\
 {} \\
---metaData="{}" \\
+--metadata="{}" \\
 --GTF="{}" \\
 --inPath="{}" \\
 --outPath="{}" \\
@@ -66,7 +66,7 @@ def deseq2(args, sw_cfg, task_cfg):
 \n'''.format(
          sw_cfg_deseq2['exe'],
          sw_cfg_deseq2['script'],
-         task_cfg_deseq2['meta_data_path'],
+         task_cfg_deseq2['metadata_path'],
          task_cfg_reference['anno_gtf'],
          task_cfg_deseq2['in_dir_path'],
          task_cfg_deseq2['out_file_path_list'][0],

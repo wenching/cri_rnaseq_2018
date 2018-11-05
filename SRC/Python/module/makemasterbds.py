@@ -49,12 +49,12 @@ flavor_2_sequencing_layout_dict = \
     }
 
 
-def make_master_bds(args, meta_data, project_cfg, task_cfg):
+def make_master_bds(args, metadata, project_cfg, task_cfg):
     """
     Make Master BigDataScript.
 
     :parm args: an argparse.Namespace object of main argumens {.log_file}
-    :parm meta_data: an pandas.core.frame.DataFrame object of sample information {DF::meta_data}
+    :parm metadata: an pandas.core.frame.DataFrame object of sample information {DF::metadata}
     :parm project_cfg: a dictionary of project configureation {project_configuration}
     :parm task_cfg: a dictionary of task configureation {task_configuration}
     :returns: None
@@ -86,16 +86,16 @@ def make_master_bds(args, meta_data, project_cfg, task_cfg):
 
     logging.info("TRANSFORM Sample Information\n")
 
-    ddicts_meta_data = util.ddictfunc.ddicts()
+    ddicts_metadata = util.ddictfunc.ddicts()
     dict_library_info = {}
 
-    for index, row in meta_data.iterrows():
-        ddicts_meta_data[row['Group']][row['Sample']][row['Library']][row['ReadGroup']] = \
+    for index, row in metadata.iterrows():
+        ddicts_metadata[row['Group']][row['Sample']][row['Library']][row['ReadGroup']] = \
             util.ddictfunc.subset(row.to_dict(), ["Group", "Sample", "Library", "ReadGroup"], invert = True)
         dict_library_info[row['Library']] = row['Group']
 
-    ddicts_meta_data = util.ddictfunc.ddicts_2_dict(ddicts_meta_data)
-    #util.ddictfunc.pprint_ddicts(ddicts_meta_data)
+    ddicts_metadata = util.ddictfunc.ddicts_2_dict(ddicts_metadata)
+    #util.ddictfunc.pprint_ddicts(ddicts_metadata)
     #util.ddictfunc.pprint_ddicts(dict_library_info)
 
     logging.debug("TRANSFORM Sample Information - DONE\n")
@@ -130,13 +130,13 @@ def make_master_bds(args, meta_data, project_cfg, task_cfg):
         )
     out_dir_t_path = task_cfg['read_qc']['main']['out_step_dir']
     if not os.path.exists(out_dir_t_path):
-        logging.debug("MKDIR: [ $out_dir_t_path ]")
+        logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
         os.makedirs(out_dir_t_path, exist_ok=True)
 
-    for group in ddicts_meta_data.keys():
-        for sample in ddicts_meta_data[group].keys():
-            for library in ddicts_meta_data[group][sample].keys():
-                for read_group in ddicts_meta_data[group][sample][library].keys():
+    for group in ddicts_metadata.keys():
+        for sample in ddicts_metadata[group].keys():
+            for library in ddicts_metadata[group][sample].keys():
+                for read_group in ddicts_metadata[group][sample][library].keys():
                     task_cfg['read_qc'][library][read_group]['out_dir_path'] = \
                         '{}/{}/{}'.format(
                             task_cfg['read_qc']['main']['out_step_dir'],
@@ -146,8 +146,8 @@ def make_master_bds(args, meta_data, project_cfg, task_cfg):
                     task_cfg['read_qc'][library][read_group]['in_file_path_list'] = \
                         [
                             '{}/{}'.format(
-                                ddicts_meta_data[group][sample][library][read_group]['Location'],
-                                ddicts_meta_data[group][sample][library][read_group]['Seqfile1']
+                                ddicts_metadata[group][sample][library][read_group]['Location'],
+                                ddicts_metadata[group][sample][library][read_group]['Seqfile1']
                             )
                         ]
 
@@ -158,7 +158,7 @@ def make_master_bds(args, meta_data, project_cfg, task_cfg):
                                 re.sub(
                                     r'''.fastq.gz$''',
                                     "",
-                                    ddicts_meta_data[group][sample][library][read_group]['Seqfile1']
+                                    ddicts_metadata[group][sample][library][read_group]['Seqfile1']
                                 )
                             )
                         ]
@@ -166,8 +166,8 @@ def make_master_bds(args, meta_data, project_cfg, task_cfg):
                     if 'Seqfile2' in row:
                         task_cfg['read_qc'][library][read_group]['in_file_path_list'].append(
                             '{}/{}'.format(
-                                ddicts_meta_data[group][sample][library][read_group]['Location'],
-                                ddicts_meta_data[group][sample][library][read_group]['Seqfile2']
+                                ddicts_metadata[group][sample][library][read_group]['Location'],
+                                ddicts_metadata[group][sample][library][read_group]['Seqfile2']
                             )
                         )
                         task_cfg['read_qc'][library][read_group]['out_file_path_list'].append(
@@ -176,7 +176,7 @@ def make_master_bds(args, meta_data, project_cfg, task_cfg):
                                 re.sub(
                                     r'''.fastq.gz$''',
                                     "",
-                                    ddicts_meta_data[group][sample][library][read_group]['Seqfile2']
+                                    ddicts_metadata[group][sample][library][read_group]['Seqfile2']
                                 )
                             )
                         )
@@ -191,12 +191,12 @@ def make_master_bds(args, meta_data, project_cfg, task_cfg):
 
                     #util.ddictfunc.pprint_ddicts(task_cfg, ['read_qc'])
                     '''
-                    {'read_qc': {'KO01': {'SRR1205282': {'in_file_path_list': ['/group/bioinformatics/CRI_RNAseq_2018/example/data/WT01.test.fastq.gz'],
-                                                         'log_file_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282/run.RawReadQC.FastQC.SRR1205282.log',
-                                                         'out_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282',
-                                                         'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282/SRR1205282_fastqc.zip'],
-                                                         'shell_script_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Shell/run.RawReadQC.FastQC.SRR1205282.sh'}},
-                                 'main': {'out_step_dir': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/RawReadQC'}}}
+                    {'read_qc': {'KO01': {'SRR1205282': {'in_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/data/WT01.test.fastq.gz'],
+                                                         'log_file_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282/run.RawReadQC.FastQC.SRR1205282.log',
+                                                         'out_dir_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282',
+                                                         'out_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/RawReadQC/KO01/SRR1205282/SRR1205282_fastqc.zip'],
+                                                         'shell_script_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Shell/run.RawReadQC.FastQC.SRR1205282.sh'}},
+                                 'main': {'out_step_dir': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/RawReadQC'}}}
                     '''
 
                     local_resource = ''
@@ -254,10 +254,10 @@ goal( [ '{}' ] )
     except IOError as exc:
         print(exc)
 
-    for group in ddicts_meta_data.keys():
-        for sample in ddicts_meta_data[group].keys():
-            for library in ddicts_meta_data[group][sample].keys():
-                for read_group in ddicts_meta_data[group][sample][library].keys():
+    for group in ddicts_metadata.keys():
+        for sample in ddicts_metadata[group].keys():
+            for library in ddicts_metadata[group][sample].keys():
+                for read_group in ddicts_metadata[group][sample][library].keys():
                     task_cfg['align_read']['main'][library][read_group]['in_file_path_list'] = \
                         task_cfg['read_qc'][library][read_group]['in_file_path_list'].copy()
 
@@ -271,15 +271,15 @@ goal( [ '{}' ] )
             )
         out_dir_t_path = task_cfg['align_read'][aligner]['main']['out_step_dir']
         if not os.path.exists(out_dir_t_path):
-            logging.debug("MKDIR: [ $out_dir_t_path ]")
+            logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
             os.makedirs(out_dir_t_path, exist_ok=True)
 
         task_cfg['align_read']['references'][target_genome] = project_cfg['pipeline']['references'][target_genome]
 
-        for group in ddicts_meta_data.keys():
-            for sample in ddicts_meta_data[group].keys():
-                for library in ddicts_meta_data[group][sample].keys():
-                    for read_group in ddicts_meta_data[group][sample][library].keys():
+        for group in ddicts_metadata.keys():
+            for sample in ddicts_metadata[group].keys():
+                for library in ddicts_metadata[group][sample].keys():
+                    for read_group in ddicts_metadata[group][sample][library].keys():
                         task_cfg['align_read'][aligner][library][read_group]['out_dir_path'] = \
                             '{}/{}/{}'.format(
                                 task_cfg['align_read'][aligner]['main']['out_step_dir'],
@@ -287,7 +287,7 @@ goal( [ '{}' ] )
                                 read_group)
                         out_dir_t_path = task_cfg['align_read'][aligner][library][read_group]['out_dir_path']
                         if not os.path.exists(out_dir_t_path):
-                            logging.debug("MKDIR: [ $out_dir_t_path ]")
+                            logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
                             os.makedirs(out_dir_t_path, exist_ok=True)
 
                         task_cfg['align_read'][aligner][library][read_group]['out_file_path_list'] = \
@@ -312,21 +312,21 @@ goal( [ '{}' ] )
                         '''
                         {'align_read': {'main': {'KO01': {'SRR1205282': {'in_file_path_list': ['/group/bioinformatics/CRI_RNAseq_2018/example/data/KO01.test.fastq.gz']}}},
                                         'references': {'grch38': {'anno_bed': None,
-                                                                  'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
-                                                                  'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.gtf',
-                                                                  'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.refFlat.txt',
-                                                                  'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.bed',
-                                                                  'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.interval_list',
-                                                                  'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.chrom.size',
+                                                                  'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.gtf.bed12',
+                                                                  'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.gtf',
+                                                                  'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.refFlat.txt',
+                                                                  'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/hg38_rRNA.bed',
+                                                                  'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/hg38_rRNA.bed.locations.txt',
+                                                                  'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.chrom.sizes',
                                                                   'chrs': 'chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM',
-                                                                  'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.fa',
-                                                                  'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.dict',
-                                                                  'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11'}},
-                                        'star': {'KO01': {'SRR1205282': {'log_file_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Aln/star/KO01/SRR1205282/run.alignRead.star.SRR1205282.log',
-                                                                         'out_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Aln/star/KO01/SRR1205282',
-                                                                         'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Aln/star/KO01/SRR1205282/SRR1205282.star.bam'],
-                                                                         'shell_script_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Shell/run.alignRead.star.SRR1205282.sh'}},
-                                                 'main': {'out_step_dir': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Aln/star'}}}}
+                                                                  'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genome.fa',
+                                                                  'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genome.dict',
+                                                                  'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/STAR'}},
+                                        'star': {'KO01': {'SRR1205282': {'log_file_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/SRR1205282/run.alignRead.star.SRR1205282.log',
+                                                                         'out_dir_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/SRR1205282',
+                                                                         'out_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/SRR1205282/SRR1205282.star.bam'],
+                                                                         'shell_script_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Shell/run.alignRead.star.SRR1205282.sh'}},
+                                                 'main': {'out_step_dir': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star'}}}}
                         '''
 
                         local_resource = ''
@@ -403,15 +403,15 @@ goal( [ '{}' ] )
             )
         out_dir_t_path = task_cfg['merge_aln'][aligner]['main']['out_step_dir']
         if not os.path.exists(out_dir_t_path):
-            logging.debug("MKDIR: [ $out_dir_t_path ]")
+            logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
             os.makedirs(out_dir_t_path, exist_ok=True)
 
-        for group in ddicts_meta_data.keys():
-            for sample in ddicts_meta_data[group].keys():
-                for library in ddicts_meta_data[group][sample].keys():
+        for group in ddicts_metadata.keys():
+            for sample in ddicts_metadata[group].keys():
+                for library in ddicts_metadata[group][sample].keys():
                     task_cfg['merge_aln'][aligner][library]['in_file_path_list'] = []
 
-                    for read_group in ddicts_meta_data[group][sample][library].keys():
+                    for read_group in ddicts_metadata[group][sample][library].keys():
                         task_cfg['merge_aln'][aligner][library]['in_file_path_list'].extend(
                             task_cfg['align_read'][aligner][library][read_group]['out_file_path_list'].copy()
                         )
@@ -423,7 +423,7 @@ goal( [ '{}' ] )
                         )
                     out_dir_t_path = task_cfg['merge_aln'][aligner][library]['out_dir_path']
                     if not os.path.exists(out_dir_t_path):
-                        logging.debug("MKDIR: [ $out_dir_t_path ]")
+                        logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
                         os.makedirs(out_dir_t_path, exist_ok=True)
 
                     task_cfg['merge_aln'][aligner][library]['out_file_path_list'] = \
@@ -447,12 +447,12 @@ goal( [ '{}' ] )
 
                     #util.ddictfunc.pprint_ddicts(task_cfg, ['merge_aln'])
                     '''
-                    {'merge_aln': {'star': {'KO01': {'in_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Aln/star/KO01/SRR1205282/SRR1205282.star.bam'],
-                                                     'log_file_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Aln/star/KO01/run.mergeAln.star.KO01.log',
-                                                     'out_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Aln/star/KO01',
-                                                     'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bam'],
-                                                     'shell_script_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Shell/run.mergeAln.star.KO01.sh'},
-                                            'main': {'out_step_dir': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Aln/star'}}}}
+                    {'merge_aln': {'star': {'KO01': {'in_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/SRR1205282/SRR1205282.star.bam'],
+                                                     'log_file_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/run.mergeAln.star.KO01.log',
+                                                     'out_dir_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01',
+                                                     'out_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bam'],
+                                                     'shell_script_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Shell/run.mergeAln.star.KO01.sh'},
+                                            'main': {'out_step_dir': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star'}}}}
                     '''
 
                     local_resource = ''
@@ -542,9 +542,9 @@ goal( [ '{}' ] )
     task_cfg['aln_qc']['references'][target_genome] = project_cfg['pipeline']['references'][target_genome]
 
     for aligner in project_cfg['aligners']:
-        for group in ddicts_meta_data.keys():
-            for sample in ddicts_meta_data[group].keys():
-                for library in ddicts_meta_data[group][sample].keys():
+        for group in ddicts_metadata.keys():
+            for sample in ddicts_metadata[group].keys():
+                for library in ddicts_metadata[group][sample].keys():
                     task_cfg['aln_qc']['main'][aligner][library]['in_file_path_list'] = \
                         task_cfg['merge_aln'][aligner][library]['out_file_path_list'].copy()
 
@@ -570,12 +570,12 @@ goal( [ '{}' ] )
                 )
             out_dir_t_path = task_cfg['aln_qc'][alnqctool][aligner]['main']['out_step_dir']
             if not os.path.exists(out_dir_t_path):
-                logging.debug("MKDIR: [ $out_dir_t_path ]")
+                logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
                 os.makedirs(out_dir_t_path, exist_ok=True)
 
-            for group in ddicts_meta_data.keys():
-                for sample in ddicts_meta_data[group].keys():
-                    for library in ddicts_meta_data[group][sample].keys():
+            for group in ddicts_metadata.keys():
+                for sample in ddicts_metadata[group].keys():
+                    for library in ddicts_metadata[group][sample].keys():
                         logging.info("[ {} ] Alignment QC:: Library: {}\n".format(SELF_FILE, library))
 
                         task_cfg['aln_qc'][alnqctool][aligner][library]['main']['out_dir_path'] = \
@@ -585,7 +585,7 @@ goal( [ '{}' ] )
                             )
                         out_dir_t_path = task_cfg['aln_qc'][alnqctool][aligner][library]['main']['out_dir_path']
                         if not os.path.exists(out_dir_t_path):
-                            logging.debug("MKDIR: [ $out_dir_t_path ]")
+                            logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
                             os.makedirs(out_dir_t_path, exist_ok=True)
 
                         task_cfg['aln_qc'][alnqctool][aligner][library]['main']['tmp_dir_path'] = \
@@ -595,7 +595,7 @@ goal( [ '{}' ] )
                             )
                         out_dir_t_path = task_cfg['aln_qc'][alnqctool][aligner][library]['main']['tmp_dir_path']
                         if not os.path.exists(out_dir_t_path):
-                            logging.debug("MKDIR: [ $out_dir_t_path ]")
+                            logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
                             os.makedirs(out_dir_t_path, exist_ok=True)
 
                         for module in module_list:
@@ -610,7 +610,7 @@ goal( [ '{}' ] )
                             if(alnqctool == "picard"):
                                 if(module == "CollectRnaSeqMetrics"):
                                     task_cfg['aln_qc'][alnqctool][aligner][library]['main']['strand_specificity'] = \
-                                        lib_type_2_strand_specificity_dict[meta_data.loc[meta_data['Library'] == library]['LibType'].drop_duplicates().values.tolist()[0]][alnqctool]
+                                        lib_type_2_strand_specificity_dict[metadata.loc[metadata['Library'] == library]['LibType'].drop_duplicates().values.tolist()[0]][alnqctool]
 
                                     suffix_list = [
                                         "RNA_Metrics",
@@ -619,13 +619,21 @@ goal( [ '{}' ] )
                             elif(alnqctool == "rseqc"):
                                 if(module == "clipping_profile.py"):
                                     task_cfg['aln_qc'][alnqctool][aligner][library]['main']['sequencing_layout'] = \
-                                        flavor_2_sequencing_layout_dict[str(meta_data.loc[meta_data['Library'] == library]['Flavor'].drop_duplicates().values.tolist()[0][0])]['''{}__{}'''.format(alnqctool, module)]
+                                        flavor_2_sequencing_layout_dict[str(metadata.loc[metadata['Library'] == library]['Flavor'].drop_duplicates().values.tolist()[0][0])]['''{}__{}'''.format(alnqctool, module)]
 
                                     suffix_list = [
                                         "clipping_profile.xls",
-                                        "clipping_profile.r",
-                                        "clipping_profile.pdf"
+                                        "clipping_profile.r"
                                     ]
+                                    if(str(metadata.loc[metadata['Library'] == library]['Flavor'].drop_duplicates().values.tolist()[0][0]) == 2):
+                                        suffix_list = \
+                                        suffix_list + ["clipping_profile.pdf"]
+                                    else:
+                                        suffix_list = \
+                                        suffix_list + [
+                                            "clipping_profile.R1.pdf",
+                                            "clipping_profile.R2.pdf"
+                                        ]
                                 elif(module == "geneBody_coverage.py"):
                                     suffix_list = [
                                         "geneBodyCoverage.txt",
@@ -638,7 +646,7 @@ goal( [ '{}' ] )
                                     ]
                                 elif(module == "RPKM_saturation.py"):
                                     task_cfg['aln_qc'][alnqctool][aligner][library]['main']['strand_specificity'] = \
-                                        lib_type_2_strand_specificity_dict[meta_data.loc[meta_data['Library'] == library]['LibType'].drop_duplicates().values.tolist()[0]]['''{}__{}'''.format(alnqctool, module)]
+                                        lib_type_2_strand_specificity_dict[metadata.loc[metadata['Library'] == library]['LibType'].drop_duplicates().values.tolist()[0]]['''{}__{}'''.format(alnqctool, module)]
 
                                     suffix_list = [
                                         "eRPKM.xls",
@@ -672,32 +680,31 @@ goal( [ '{}' ] )
 
                         #util.ddictfunc.pprint_ddicts(task_cfg, ['aln_qc'])
                         '''
-                        {'aln_qc': {'main': {'star': {'KO01': {'in_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bam']},
-                                                      'WT01': {'in_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Aln/star/WT01/WT01.star.bam']}}},
+                        {'aln_qc': {'main': {'star': {'KO01': {'in_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bam']},
+                                                      'WT01': {'in_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/WT01/WT01.star.bam']}}},
                                     'picard': {'main': {'module': ['CollectRnaSeqMetrics']},
-                                               'star': {'KO01': {'CollectRnaSeqMetrics': {'log_file_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/run.alnQC.picard.star.KO01.CollectRnaSeqMetrics.log',
-                                                                                          'out_file_base': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard',
-                                                                                          'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics',
-                                                                                                                 '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics.pdf'],
-                                                                                          'shell_script_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Shell/run.alnQC.picard.star.KO01.CollectRnaSeqMetrics.sh'},
-                                                                 'main': {'out_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01',
+                                               'star': {'KO01': {'CollectRnaSeqMetrics': {'log_file_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/run.alnQC.picard.star.KO01.CollectRnaSeqMetrics.log',
+                                                                                          'out_file_base': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard',
+                                                                                          'out_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics',
+                                                                                                                 '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/KO01.star.picard.RNA_Metrics.pdf'],
+                                                                                          'shell_script_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Shell/run.alnQC.picard.star.KO01.CollectRnaSeqMetrics.sh'},
+                                                                 'main': {'out_dir_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01',
                                                                           'strand_specificity': 'NONE',
-                                                                          'tmp_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/tmp'}},
-                                                        'main': {'out_step_dir': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/AlnQC/picard/star'}}},
+                                                                          'tmp_dir_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star/KO01/tmp'}},
+                                                        'main': {'out_step_dir': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/AlnQC/picard/star'}}},
                                     'references': {'grch38': {'anno_bed': None,
-                                                              'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
-                                                              'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.gtf',
-                                                              'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.refFlat.txt',
-                                                              'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.bed',
-                                                              'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.interval_list',
-                                                              'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.chrom.size',
+                                                              'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.gtf.bed12',
+                                                              'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.gtf',
+                                                              'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.refFlat.txt',
+                                                              'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/hg38_rRNA.bed',
+                                                              'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/hg38_rRNA.bed.locations.txt',
+                                                              'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.chrom.sizes',
                                                               'chrs': 'chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM',
-                                                              'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.fa',
-                                                              'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.dict',
-                                                              'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11'}}}}
-
+                                                              'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genome.fa',
+                                                              'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genome.dict',
+                                                              'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/STAR'}}}}
                         '''
-
+                        
                         local_resource = ''
                         if args.system_type == 'cluster':
                             pbs_ppn = min([project_cfg['pipeline']['software'][alnqctool]['threads'], args.threads])
@@ -773,9 +780,9 @@ goal( [ '{}' ] )
     task_cfg['quant']['references'][target_genome] = project_cfg['pipeline']['references'][target_genome]
 
     for aligner in project_cfg['aligners']:
-        for group in ddicts_meta_data.keys():
-            for sample in ddicts_meta_data[group].keys():
-                for library in ddicts_meta_data[group][sample].keys():
+        for group in ddicts_metadata.keys():
+            for sample in ddicts_metadata[group].keys():
+                for library in ddicts_metadata[group][sample].keys():
                     task_cfg['quant']['main'][aligner][library]['in_file_path_list'] = \
                         task_cfg['merge_aln'][aligner][library]['out_file_path_list'].copy()
 
@@ -798,12 +805,12 @@ goal( [ '{}' ] )
                 )
             out_dir_t_path = task_cfg['quant'][quantifier][aligner]['main']['out_step_dir']
             if not os.path.exists(out_dir_t_path):
-                logging.debug("MKDIR: [ $out_dir_t_path ]")
+                logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
                 os.makedirs(out_dir_t_path, exist_ok=True)
 
-            for group in ddicts_meta_data.keys():
-                for sample in ddicts_meta_data[group].keys():
-                    for library in ddicts_meta_data[group][sample].keys():
+            for group in ddicts_metadata.keys():
+                for sample in ddicts_metadata[group].keys():
+                    for library in ddicts_metadata[group][sample].keys():
                         logging.info("[ {} ] Quantification:: Library: {}\n".format(SELF_FILE, library))
 
                         task_cfg['quant'][quantifier][aligner][library]['out_dir_path'] = \
@@ -813,7 +820,7 @@ goal( [ '{}' ] )
                             )
                         out_dir_t_path = task_cfg['quant'][quantifier][aligner][library]['out_dir_path']
                         if not os.path.exists(out_dir_t_path):
-                            logging.debug("MKDIR: [ $out_dir_t_path ]")
+                            logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
                             os.makedirs(out_dir_t_path, exist_ok=True)
 
                         #task_cfg['quant'][quantifier][aligner][library]['tmp_dir_path'] = \
@@ -823,15 +830,15 @@ goal( [ '{}' ] )
                             #)
                         #out_dir_t_path = task_cfg['quant'][quantifier][aligner][library]['tmp_dir_path']
                         #if not os.path.exists(out_dir_t_path):
-                            #logging.debug("MKDIR: [ $out_dir_t_path ]")
+                            #logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
                             #os.makedirs(out_dir_t_path, exist_ok=True)
 
                         if quantifier == "featurecounts":
                             task_cfg['quant'][quantifier][aligner][library]['strandSpecific'] = \
-                                lib_type_2_strand_specificity_dict[meta_data.loc[meta_data['Library'] == library]['LibType'].drop_duplicates().values.tolist()[0]][quantifier]
+                                lib_type_2_strand_specificity_dict[metadata.loc[metadata['Library'] == library]['LibType'].drop_duplicates().values.tolist()[0]][quantifier]
 
                             task_cfg['quant'][quantifier][aligner][library]['isPairedEnd'] = \
-                                flavor_2_sequencing_layout_dict[str(meta_data.loc[meta_data['Library'] == library]['Flavor'].drop_duplicates().values.tolist()[0][0])][quantifier]
+                                flavor_2_sequencing_layout_dict[str(metadata.loc[metadata['Library'] == library]['Flavor'].drop_duplicates().values.tolist()[0][0])][quantifier]
 
                         task_cfg['quant'][quantifier][aligner][library]['out_file_base'] = \
                             '{}/{}.{}.{}'.format(
@@ -871,26 +878,26 @@ goal( [ '{}' ] )
                         #util.ddictfunc.pprint_ddicts(task_cfg, ['quant'])
                         '''
                         {'quant': {'featurecounts': {'star': {'KO01': {'isPairedEnd': False,
-                                                                       'log_file_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/run.quant.featurecounts.star.KO01.log',
-                                                                       'out_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01',
-                                                                       'out_file_base': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts',
-                                                                       'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count'],
-                                                                       'shell_script_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Shell/run.quant.featurecounts.star.KO01.sh',
+                                                                       'log_file_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/run.quant.featurecounts.star.KO01.log',
+                                                                       'out_dir_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01',
+                                                                       'out_file_base': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts',
+                                                                       'out_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count'],
+                                                                       'shell_script_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Shell/run.quant.featurecounts.star.KO01.sh',
                                                                        'strandSpecific': 0},
-                                                              'main': {'out_step_dir': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star'}}},
-                                   'main': {'star': {'KO01': {'in_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bam']},
-                                                     'WT01': {'in_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Aln/star/WT01/WT01.star.bam']}}},
+                                                              'main': {'out_step_dir': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star'}}},
+                                   'main': {'star': {'KO01': {'in_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/KO01/KO01.star.bam']},
+                                                     'WT01': {'in_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Aln/star/WT01/WT01.star.bam']}}},
                                    'references': {'grch38': {'anno_bed': None,
-                                                             'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
-                                                             'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.gtf',
-                                                             'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.refFlat.txt',
-                                                             'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.bed',
-                                                             'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.interval_list',
-                                                             'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.chrom.size',
+                                                             'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.bed12',
+                                                             'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.gtf',
+                                                             'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.refFlat.txt',
+                                                             'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.rRNA.bed',
+                                                             'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.rRNA.interval_list',
+                                                             'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.chrom.size',
                                                              'chrs': 'chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM',
-                                                             'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.fa',
-                                                             'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.dict',
-                                                             'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11'}}}}
+                                                             'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.fa',
+                                                             'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.dict',
+                                                             'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12'}}}}
 
                         '''
 
@@ -964,7 +971,7 @@ goal( [ '{}' ] )
         print(exc)
 
     task_cfg['call']['references'][target_genome] = project_cfg['pipeline']['references'][target_genome]
-    task_cfg['call']['main']['meta_data_path'] = args.meta_data_path
+    task_cfg['call']['main']['metadata_path'] = args.metadata_path
     task_cfg['call']['main'].update({'application': proj_appl})
     task_cfg['call']['main']['comparison'] = \
         project_cfg['project']['comparison']
@@ -977,9 +984,9 @@ goal( [ '{}' ] )
 
             task_cfg['call']['main'][quantifier][aligner]['in_file_path_list'] = []
 
-            for group in ddicts_meta_data.keys():
-                for sample in ddicts_meta_data[group].keys():
-                    for library in ddicts_meta_data[group][sample].keys():
+            for group in ddicts_metadata.keys():
+                for sample in ddicts_metadata[group].keys():
+                    for library in ddicts_metadata[group][sample].keys():
                         logging.info("[ {} ] Quantification:: Library: {}\n".format(SELF_FILE, library))
 
                         task_cfg['call']['main'][quantifier][aligner]['in_file_path_list'].extend(
@@ -1014,7 +1021,7 @@ goal( [ '{}' ] )
                     )
                 out_dir_t_path = task_cfg['call'][caller][quantifier][aligner]['out_dir_path']
                 if not os.path.exists(out_dir_t_path):
-                    logging.debug("MKDIR: [ $out_dir_t_path ]")
+                    logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
                     os.makedirs(out_dir_t_path, exist_ok=True)
 
                 task_cfg['call'][caller][quantifier][aligner]['out_file_path_list'] = \
@@ -1055,43 +1062,43 @@ goal( [ '{}' ] )
                             #comparison
                         #)
                     #if not os.path.exists(out_dir_t_path):
-                        #logging.debug("MKDIR: [ $out_dir_t_path ]")
+                        #logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
                         #os.makedirs(out_dir_t_path, exist_ok=True)
 
                 #util.ddictfunc.pprint_ddicts(task_cfg, ['call'])
                 '''
-                {'call': {'edger': {'featurecounts': {'star': {'log_file_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/DEG/edger/featurecounts/star/run.call.edger.featurecounts.star.DLBC.log',
-                                                               'out_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/DEG/edger/featurecounts/star',
-                                                               'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/DEG/edger/featurecounts/star/DLBC.star.featurecounts.edger.count.txt'],
-                                                               'shell_script_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/shell_scripts/run.call.edger.featurecounts.star.DLBC.sh'}}},
+                {'call': {'edger': {'featurecounts': {'star': {'log_file_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/edger/featurecounts/star/run.call.edger.featurecounts.star.DLBC.log',
+                                                               'out_dir_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/edger/featurecounts/star',
+                                                               'out_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/edger/featurecounts/star/DLBC.star.featurecounts.edger.count.txt'],
+                                                               'shell_script_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.call.edger.featurecounts.star.DLBC.sh'}}},
                           'main': {'application': 'RNAseq',
                                    'comparison': {'KO_vs_WT': {'criteria': None,
                                                                'filter_4_low_expr': None,
                                                                'fold_change': None,
                                                                'pval': None}},
                                    'criteria': 'fc_q',
-                                   'featurecounts': {'star': {'in_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star',
-                                                              'in_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count',
-                                                                                    '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO02/KO02.star.featurecounts.count',
-                                                                                    '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO03/KO03.star.featurecounts.count',
-                                                                                    '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT01/WT01.star.featurecounts.count',
-                                                                                    '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT02/WT02.star.featurecounts.count',
-                                                                                    '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT03/WT03.star.featurecounts.count']}},
+                                   'featurecounts': {'star': {'in_dir_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star',
+                                                              'in_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO01/KO01.star.featurecounts.count',
+                                                                                    '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO02/KO02.star.featurecounts.count',
+                                                                                    '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/KO03/KO03.star.featurecounts.count',
+                                                                                    '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT01/WT01.star.featurecounts.count',
+                                                                                    '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT02/WT02.star.featurecounts.count',
+                                                                                    '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/Quantification/featurecounts/star/WT03/WT03.star.featurecounts.count']}},
                                    'filter_4_low_expr': True,
                                    'fold_change': 1.5,
-                                   'meta_data_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC.metadata.txt',
+                                   'metadata_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC.metadata.txt',
                                    'pval': 0.1},
-                          'references': {'grch38': {'anno_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
-                                                    'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
-                                                    'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.gtf',
-                                                    'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.refFlat.txt',
-                                                    'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.bed',
-                                                    'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.interval_list',
-                                                    'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.chrom.size',
+                          'references': {'grch38': {'anno_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.bed12',
+                                                    'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.bed12',
+                                                    'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.gtf',
+                                                    'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.refFlat.txt',
+                                                    'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.rRNA.bed',
+                                                    'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.rRNA.interval_list',
+                                                    'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.chrom.size',
                                                     'chrs': 'chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM',
-                                                    'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.fa',
-                                                    'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.dict',
-                                                    'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11'}}}}
+                                                    'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.fa',
+                                                    'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.dict',
+                                                    'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12'}}}}
                 '''
 
                 local_resource = ''
@@ -1120,7 +1127,7 @@ goal( [ '{}' ] )
          aligner,
          quantifier,
          caller,
-         "', '".join(task_cfg['call'][caller][quantifier][aligner]['out_file_path_list']),
+         "', '".join(task_cfg['call'][caller][quantifier][aligner]['out_file_path_list'] + [re.sub(r'.count.txt$', '.test.DEG.txt', file) for file in task_cfg['call'][caller][quantifier][aligner]['out_file_path_list']]),
          "', '".join(task_cfg['call']['main'][quantifier][aligner]['in_file_path_list']),
          local_resource,
          task_cfg['call'][caller][quantifier][aligner]['shell_script_path'],
@@ -1193,7 +1200,7 @@ goal( [ '{}' ] )
         sys.exit()
 
     task_cfg['quant_qc']['references'][target_genome] = project_cfg['pipeline']['references'][target_genome]
-    task_cfg['quant_qc']['main']['meta_data_path'] = args.meta_data_path
+    task_cfg['quant_qc']['main']['metadata_path'] = args.metadata_path
     task_cfg['quant_qc']['main'].update(
         {
             'application': proj_appl,
@@ -1225,7 +1232,7 @@ goal( [ '{}' ] )
                 )
             out_dir_t_path = task_cfg['quant_qc']['main'][quantifier][aligner]['out_dir_path']
             if not os.path.exists(out_dir_t_path):
-                logging.debug("MKDIR: [ $out_dir_t_path ]")
+                logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
                 os.makedirs(out_dir_t_path, exist_ok=True)
 
     for tool in quant_qc_tool:
@@ -1284,29 +1291,29 @@ goal( [ '{}' ] )
                 #util.ddictfunc.pprint_ddicts(task_cfg, ['quant_qc'])
                 '''
                 {'quant_qc': {'main': {'application': 'RNAseq',
-                                       'featurecounts': {'star': {'in_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.count.txt'],
-                                                                  'out_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/QuantQC/featurecounts/star'}},
+                                       'featurecounts': {'star': {'in_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.count.txt'],
+                                                                  'out_dir_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/QuantQC/featurecounts/star'}},
                                        'library_info': {'KO01': 'KO',
                                                         'KO02': 'KO',
                                                         'KO03': 'KO',
                                                         'WT01': 'WT',
                                                         'WT02': 'WT',
                                                         'WT03': 'WT'},
-                                       'meta_data_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC.metadata.txt'},
-                              'pca': {'featurecounts': {'star': {'log_file_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/QuantQC/featurecounts/star/run.quantQC.pca.featurecounts.star.DLBC.log',
-                                                                 'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/QuantQC/featurecounts/star/DLBC.star.featurecounts.pca.pdf'],
-                                                                 'shell_script_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/shell_scripts/run.quantQC.pca.featurecounts.star.DLBC.sh'}}},
-                              'references': {'grch38': {'anno_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
-                                                        'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
-                                                        'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.gtf',
-                                                        'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.refFlat.txt',
-                                                        'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.bed',
-                                                        'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.interval_list',
-                                                        'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.chrom.size',
+                                       'metadata_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC.metadata.txt'},
+                              'pca': {'featurecounts': {'star': {'log_file_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/QuantQC/featurecounts/star/run.quantQC.pca.featurecounts.star.DLBC.log',
+                                                                 'out_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/QuantQC/featurecounts/star/DLBC.star.featurecounts.pca.pdf'],
+                                                                 'shell_script_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.quantQC.pca.featurecounts.star.DLBC.sh'}}},
+                              'references': {'grch38': {'anno_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.bed12',
+                                                        'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.bed12',
+                                                        'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.gtf',
+                                                        'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.refFlat.txt',
+                                                        'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.rRNA.bed',
+                                                        'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.rRNA.interval_list',
+                                                        'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.chrom.size',
                                                         'chrs': 'chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM',
-                                                        'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.fa',
-                                                        'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.dict',
-                                                        'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11'}}}}
+                                                        'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.fa',
+                                                        'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.dict',
+                                                        'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12'}}}}
                 '''
 
                 local_resource = ''
@@ -1488,7 +1495,7 @@ goal( [ '{}' ] )
                     )
                 out_dir_t_path = task_cfg['loci_stat'][quantifier][aligner][proj_comp]['out_dir_path']
                 if not os.path.exists(out_dir_t_path):
-                    logging.debug("MKDIR: [ $out_dir_t_path ]")
+                    logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
                     os.makedirs(out_dir_t_path, exist_ok=True)
 
                 task_cfg['loci_stat'][quantifier][aligner][proj_comp]['out_file_path_list'] = \
@@ -1520,26 +1527,26 @@ goal( [ '{}' ] )
 
                 #util.ddictfunc.pprint_ddicts(task_cfg, ['loci_stat'])
                 '''
-                {'loci_stat': {'featurecounts': {'star': {'DLBC': {'in_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC_full/RNAseq/DEG/edger/featurecounts/star/DLBC.star.featurecounts.edger.test.DEG.txt',
-                                                                                         '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC_full/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.test.DEG.txt',
-                                                                                         '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC_full/RNAseq/DEG/limma/featurecounts/star/DLBC.star.featurecounts.limma.test.DEG.txt'],
-                                                                   'log_file_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/run.call.featurecounts.star.DLBC.log',
-                                                                   'out_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC',
-                                                                   'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/DLBC.star.featurecounts.overlap.txt'],
-                                                                   'shell_script_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/shell_scripts/run.lociStat.featurecounts.star.DLBC.sh'},
-                                                          'main': {'anchor_file_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC_full/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.test.txt'}}},
+                {'loci_stat': {'featurecounts': {'star': {'DLBC': {'in_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC_full/RNAseq/DEG/edger/featurecounts/star/DLBC.star.featurecounts.edger.test.DEG.txt',
+                                                                                         '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC_full/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.test.DEG.txt',
+                                                                                         '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC_full/RNAseq/DEG/limma/featurecounts/star/DLBC.star.featurecounts.limma.test.DEG.txt'],
+                                                                   'log_file_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/run.call.featurecounts.star.DLBC.log',
+                                                                   'out_dir_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC',
+                                                                   'out_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/DLBC.star.featurecounts.overlap.txt'],
+                                                                   'shell_script_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.lociStat.featurecounts.star.DLBC.sh'},
+                                                          'main': {'anchor_file_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC_full/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.test.txt'}}},
                                'main': {'application': 'RNAseq'},
-                               'references': {'grch38': {'anno_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
-                                                         'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
-                                                         'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.gtf',
-                                                         'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.refFlat.txt',
-                                                         'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.bed',
-                                                         'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.interval_list',
-                                                         'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.chrom.size',
+                               'references': {'grch38': {'anno_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.bed12',
+                                                         'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.bed12',
+                                                         'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.gtf',
+                                                         'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.refFlat.txt',
+                                                         'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.rRNA.bed',
+                                                         'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.rRNA.interval_list',
+                                                         'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.chrom.size',
                                                          'chrs': 'chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM',
-                                                         'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.fa',
-                                                         'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.dict',
-                                                         'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11'}}}}
+                                                         'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.fa',
+                                                         'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.dict',
+                                                         'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12'}}}}
 
                 '''
 
@@ -1671,9 +1678,9 @@ goal( [ '{}' ] )
                         aligner,
                         quantifier,
                         caller,
-                        "count.txt"                        
+                        "count.txt"
                     )
-                
+
                 if project_cfg['project']['run_as_practice']:
                     task_cfg['post_ana']['main'][quantifier][aligner][proj_comp]['expr_tbl_path'] = \
                         re.sub(
@@ -1718,10 +1725,10 @@ goal( [ '{}' ] )
                             aligner,
                             proj_comp
                         )
-                    
+
                     out_dir_t_path = task_cfg['post_ana'][tool][quantifier][aligner][proj_comp]['out_dir_path']
                     if not os.path.exists(out_dir_t_path):
-                        logging.debug("MKDIR: [ $out_dir_t_path ]")
+                        logging.debug("MKDIR: [ {} ]".format(out_dir_t_path))
                         os.makedirs(out_dir_t_path, exist_ok=True)
 
                     out_file_base = \
@@ -1731,7 +1738,7 @@ goal( [ '{}' ] )
                             aligner,
                             quantifier
                         )
-                    
+
                     task_cfg['post_ana'][tool][quantifier][aligner][proj_comp]['out_file_path_list'] = \
                             [
                                 '{}.{}'.format(
@@ -1761,23 +1768,23 @@ goal( [ '{}' ] )
                     #util.ddictfunc.pprint_ddicts(task_cfg, ['post_ana'])
                     '''
                     {'post_ana': {'main': {'application': 'RNAseq',
-                                           'featurecounts': {'star': {'DLBC': {'expr_tbl_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC_full/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.count.txt',
-                                                                               'in_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/DLBC.star.featurecounts.overlap.txt']}}}},
-                                  'pheatmap': {'featurecounts': {'star': {'DLBC': {'log_file_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/PostAna/pheatmap/featurecounts/star/DLBC/run.postAna.pheatmap.featurecounts.star.DLBC.log',
-                                                                                   'out_dir_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/PostAna/pheatmap/featurecounts/star/DLBC',
-                                                                                   'out_file_path_list': ['/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/PostAna/pheatmap/featurecounts/star/DLBC/DLBC.star.featurecounts.heatmap.pdf'],
-                                                                                   'shell_script_path': '/Users/wenching/Desktop/Sync/CRI/CRI-Pipeline/CRI_RNAseq_2018/example/DLBC/RNAseq/shell_scripts/run.postAna.pheatmap.featurecounts.star.DLBC.sh'}}}},
-                                  'references': {'grch38': {'anno_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
-                                                            'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.bed12',
-                                                            'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.gtf',
-                                                            'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.refFlat.txt',
-                                                            'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.bed',
-                                                            'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/gencode.v24.primary_assembly.annotation.chr11.rRNA.interval_list',
-                                                            'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.chrom.size',
+                                           'featurecounts': {'star': {'DLBC': {'expr_tbl_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC_full/RNAseq/DEG/deseq2/featurecounts/star/DLBC.star.featurecounts.deseq2.count.txt',
+                                                                               'in_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/LociStat/featurecounts/star/DLBC/DLBC.star.featurecounts.overlap.txt']}}}},
+                                  'pheatmap': {'featurecounts': {'star': {'DLBC': {'log_file_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/PostAna/pheatmap/featurecounts/star/DLBC/run.postAna.pheatmap.featurecounts.star.DLBC.log',
+                                                                                   'out_dir_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/PostAna/pheatmap/featurecounts/star/DLBC',
+                                                                                   'out_file_path_list': ['/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/PostAna/pheatmap/featurecounts/star/DLBC/DLBC.star.featurecounts.heatmap.pdf'],
+                                                                                   'shell_script_path': '/gpfs/data/bioinformatics/cri_rnaseq_2018/example/DLBC/RNAseq/shell_scripts/run.postAna.pheatmap.featurecounts.star.DLBC.sh'}}}},
+                                  'references': {'grch38': {'anno_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.bed12',
+                                                            'anno_bed12': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.bed12',
+                                                            'anno_gtf': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.gtf',
+                                                            'anno_refflat': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.refFlat.txt',
+                                                            'anno_ribosome_rna_bed': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.rRNA.bed',
+                                                            'anno_ribosome_rna_interval': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/genes.rRNA.interval_list',
+                                                            'chrom_size': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.chrom.size',
                                                             'chrs': 'chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM',
-                                                            'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.fa',
-                                                            'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11/GRCh38.primary_assembly.genome.chr11.dict',
-                                                            'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/GRCh38.primary_Gencode24_50bp_chr11'}}}}
+                                                            'genome': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.fa',
+                                                            'genomedict': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12/GRCh38.primary_assembly.genome.chr11.dict',
+                                                            'star_index': '/group/bioinformatics/CRI_RNAseq_2018/example/reference/v28_92_GRCh38.p12'}}}}
                     '''
 
 

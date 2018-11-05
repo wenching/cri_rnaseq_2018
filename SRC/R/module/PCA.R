@@ -4,7 +4,7 @@
 #' 
 #' run PCA
 #' 
-#' @param metaData character. meta data file
+#' @param metadata character. meta data file
 #' @param GTF character. GTF file
 #' @param inPath character vector. input
 #' @param outPath character vector. output

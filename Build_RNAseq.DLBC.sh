@@ -12,7 +12,7 @@ padding="example/"
 ## command
 echo "START" `date` " Running build_rnaseq.py"
 python3 SRC/Python/build_rnaseq.py \
-	--projdir $PWD/${padding}$project \
+	--projdir $PWD \
 	--metadata $PWD/${padding}$project.metadata.txt \
 	--config $PWD/${padding}$project.pipeline.yaml \
 	--systype cluster \
@@ -20,7 +20,7 @@ python3 SRC/Python/build_rnaseq.py \
 	--log_file $PWD/Build_RNAseq.$project.$now.log
 
 ## submit pipeline master script
-echo "START" `date` " Running ${padding}$project/Submit_RNAseq.$project.sh"
-echo "bash ${padding}$project/Submit_RNAseq.$project.sh"
+echo "START" `date` " Running Submit_$project.sh"
+echo "bash Submit_$project.sh"
 
 echo "END" `date`

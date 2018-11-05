@@ -279,7 +279,7 @@ def RPKM_saturation(args, sw_cfg, task_cfg):
     module = "RPKM_saturation.py"
     task_cfg_module = task_cfg[module]
     log_file_path_cmd = '' if 'log_file_path' not in task_cfg_module else '''&>> {}'''.format(task_cfg_module['log_file_path'])
-    strand_rule_cmd = '' if task_cfg_module['strand_specificity'] is None else """--strand='{}'""".format(task_cfg_module['shell_script_path'])
+    strand_rule_cmd = '' if task_cfg_module['strand_specificity'] is None else """--strand='{}'""".format(task_cfg_module['strand_specificity'])
     shell_script_path = '' if 'shell_script_path' not in task_cfg_module else task_cfg_module['shell_script_path']
 
     task_cfg_reference = task_cfg['references'][next(iter(task_cfg['references']))]

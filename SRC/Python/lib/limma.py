@@ -51,7 +51,7 @@ def limma(args, sw_cfg, task_cfg):
     
     cmd_list.append('''{} \\
 {} \\
---metaData="{}" \\
+--metadata="{}" \\
 --GTF="{}" \\
 --inPath="{}" \\
 --outPath="{}" \\
@@ -66,7 +66,7 @@ def limma(args, sw_cfg, task_cfg):
 \n'''.format(
          sw_cfg_limma['exe'],
          sw_cfg_limma['script'],
-         task_cfg_limma['meta_data_path'],
+         task_cfg_limma['metadata_path'],
          task_cfg_reference['anno_gtf'],
          task_cfg_limma['in_dir_path'],
          task_cfg_limma['out_file_path_list'][0],
