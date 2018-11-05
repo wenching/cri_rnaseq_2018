@@ -6,7 +6,7 @@ now=$(date +"%m-%d-%Y_%H:%M:%S")
 
 ## project info
 project="DLBC"
-SubmitRNAseqExe="Submit_RNAseq.$project.sh"
+SubmitRNAseqExe="Submit_${PWD##*/}.sh"
 padding="example/"
 
 ## command
@@ -20,7 +20,7 @@ python3 SRC/Python/build_rnaseq.py \
 	--log_file $PWD/Build_RNAseq.$project.$now.log
 
 ## submit pipeline master script
-echo "START" `date` " Running Submit_$project.sh"
-echo "bash Submit_$project.sh"
+echo "START" `date` " Running $SubmitRNAseqExe"
+echo "bash $SubmitRNAseqExe"
 
 echo "END" `date`
