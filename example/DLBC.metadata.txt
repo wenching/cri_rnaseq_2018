@@ -1,7 +1,7 @@
 Sample	Library	ReadGroup	LibType	Platform	SequencingCenter	Date	Lane	Unit	Flavor	Encoding	Run	Genome	NucleicAcid	Group	Location	Seqfile1
-KO01	KO01	SRR1205282	NS	Illumina	SRA	2015-07-22	7	FCC2B5CACXX	1x49	33	0	grch38	rnaseq	KO	/group/bioinformatics/CRI_RNAseq_2018/example/data	KO01.test.fastq.gz
-KO02	KO02	SRR1205283	NS	Illumina	SRA	2015-07-22	7	FCC2B5CACXX	1x49	33	0	grch38	rnaseq	KO	/group/bioinformatics/CRI_RNAseq_2018/example/data	KO02.test.fastq.gz
-KO03	KO03	SRR1205284	NS	Illumina	SRA	2015-07-22	7	FCC2B5CACXX	1x49	33	0	grch38	rnaseq	KO	/group/bioinformatics/CRI_RNAseq_2018/example/data	KO03.test.fastq.gz
-WT01	WT01	SRR1205285	NS	Illumina	SRA	2015-07-22	4	FCC2C3CACXX	1x49	33	0	grch38	rnaseq	WT	/group/bioinformatics/CRI_RNAseq_2018/example/data	WT01.test.fastq.gz
-WT02	WT02	SRR1205286	NS	Illumina	SRA	2015-07-22	4	FCC2C3CACXX	1x49	33	0	grch38	rnaseq	WT	/group/bioinformatics/CRI_RNAseq_2018/example/data	WT02.test.fastq.gz
-WT03	WT03	SRR1205287	NS	Illumina	SRA	2015-07-22	4	FCC2C3CACXX	1x49	33	0	grch38	rnaseq	WT	/group/bioinformatics/CRI_RNAseq_2018/example/data	WT03.test.fastq.gz
+KO01	KO01	SRR1205282	NS	Illumina	SRA	2015-07-22	7	FCC2B5CACXX	1x49	33	0	grch38	rnaseq	KO	/gpfs/data/bioinformatics/cri_rnaseq_2018/example/data	KO01.fastq.gz
+KO02	KO02	SRR1205283	NS	Illumina	SRA	2015-07-22	7	FCC2B5CACXX	1x49	33	0	grch38	rnaseq	KO	/gpfs/data/bioinformatics/cri_rnaseq_2018/example/data	KO02.fastq.gz
+KO03	KO03	SRR1205284	NS	Illumina	SRA	2015-07-22	7	FCC2B5CACXX	1x49	33	0	grch38	rnaseq	KO	/gpfs/data/bioinformatics/cri_rnaseq_2018/example/data	KO03.fastq.gz
+WT01	WT01	SRR1205285	NS	Illumina	SRA	2015-07-22	4	FCC2C3CACXX	1x49	33	0	grch38	rnaseq	WT	/gpfs/data/bioinformatics/cri_rnaseq_2018/example/data	WT01.fastq.gz
+WT02	WT02	SRR1205286	NS	Illumina	SRA	2015-07-22	4	FCC2C3CACXX	1x49	33	0	grch38	rnaseq	WT	/gpfs/data/bioinformatics/cri_rnaseq_2018/example/data	WT02.fastq.gz
+WT03	WT03	SRR1205287	NS	Illumina	SRA	2015-07-22	4	FCC2C3CACXX	1x49	33	0	grch38	rnaseq	WT	/gpfs/data/bioinformatics/cri_rnaseq_2018/example/data	WT03.fastq.gz
