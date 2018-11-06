@@ -197,10 +197,11 @@ Contact     : Wen-Ching Chan <wchan10@bsd.uchicago.edu>
             )
         )
 
-    if not os.path.isabs(df_metadata.loc[0, ['Location']].to_string()):
+    if not os.path.isabs(df_metadata.iloc[0]['Location']):
         logging.info("COMPLETE relative path to absolute path")
         df_metadata['Location'] = \
             args.proj_dir + "/" + df_metadata['Location'].astype(str)
+    
 
     logging.debug("VERIFIY of Sample Information - DONE\n")
 
