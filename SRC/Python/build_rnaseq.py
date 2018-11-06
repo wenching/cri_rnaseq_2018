@@ -530,6 +530,9 @@ Contact     : Wen-Ching Chan <wchan10@bsd.uchicago.edu>
 
             outfile.write('\n## submit job \n')
             outfile.write('''\n
+
+module purge; module load gcc/6.2.0 java-jdk/1.8.0_92 bds; module update
+
 bds \\
 -config {} \\
 -reportHtml \\
@@ -539,6 +542,7 @@ bds \\
 -system {} \\
 {} \\
 &> {}/{}.log &
+
     \n'''.format(
              args.submitter_cfg,
              args.system_type,

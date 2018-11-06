@@ -625,7 +625,7 @@ goal( [ '{}' ] )
                                         "clipping_profile.xls",
                                         "clipping_profile.r"
                                     ]
-                                    if(str(metadata.loc[metadata['Library'] == library]['Flavor'].drop_duplicates().values.tolist()[0][0]) == 2):
+                                    if(str(metadata.loc[metadata['Library'] == library]['Flavor'].drop_duplicates().values.tolist()[0][0]) == 1):
                                         suffix_list = \
                                         suffix_list + ["clipping_profile.pdf"]
                                     else:
