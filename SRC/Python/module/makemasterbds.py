@@ -1222,7 +1222,7 @@ goal( [ '{}' ] )
                             i
                         ) for i in task_cfg['quant_qc']['main'][quantifier][aligner]['in_file_path_list']
                     ]
-                logging.debug("[RUN_AS_PRACTICE] useing full set result instead")
+                logging.debug("[RUN_AS_PRACTICE] using full set result instead")
 
             task_cfg['quant_qc']['main'][quantifier][aligner]['out_dir_path'] = \
                 '{}/QuantQC/{}/{}'.format(
@@ -1449,7 +1449,7 @@ goal( [ '{}' ] )
                         'DLBC_full/RNAseq',
                         task_cfg['loci_stat'][quantifier][aligner]['main']['anchor_file_path']
                     )
-                logging.debug("[RUN_AS_PRACTICE] useing full set result instead")
+                logging.debug("[RUN_AS_PRACTICE] using full set result instead")
 
             if True:
                 proj_comp = project_cfg['project']['name']
