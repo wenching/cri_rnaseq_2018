@@ -525,9 +525,9 @@ goal( [ '{}' ] )
                 "rseqc":
                 [
                     "clipping_profile.py",
-                    #"geneBody_coverage.py", # DISABLE from example due to long running time
-                    "infer_experiment.py",
-                    "RPKM_saturation.py"
+                    "geneBody_coverage.py", # DISABLE from example due to long running time
+                    "RPKM_saturation.py", # DISABLE from example due to long running time
+                    "infer_experiment.py"
                 ]
             }
     else:
@@ -710,8 +710,8 @@ goal( [ '{}' ] )
                         if args.system_type == 'cluster':
                             pbs_ppn = min([project_cfg['pipeline']['software'][alnqctool]['threads'], args.threads])
                             local_resource = ', cpus := {}, mem := {}*G, timeout := {}*hour, taskName := "{}.{}.{}"'.format(
-                                pbs_ppn,
-                                pbs_ppn * 8,
+                                16, # pbs_ppn,
+                                64, # pbs_ppn * 8,
                                 72,
                                 alnqctool,
                                 aligner,
