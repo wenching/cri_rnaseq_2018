@@ -16,7 +16,7 @@ python3 SRC/Python/build_rnaseq.py \
 	--metadata $PWD/${padding}$project.metadata.txt \
 	--config $PWD/${padding}$project.pipeline.yaml \
 	--systype cluster \
-	--threads 4 \
+	--threads 8 \
 	--log_file $PWD/Build_RNAseq.$project.$now.log
 
 ## submit pipeline master script

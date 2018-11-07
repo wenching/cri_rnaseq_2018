@@ -24,7 +24,7 @@ pipeline:
       ploidy: 2
       qc_check: QUAL:30:50,NFD:0:20,GC:40:60,N:0:2
       report_variants_pass: True
-      threads: 4
+      threads: 8
       max_multiple_hit: 1
       r_dir_path: SRC/R
     bedtools:
@@ -145,7 +145,7 @@ pipeline:
       exe: ~
       mem: 4
       module: module purge; module load gcc python/2.7.13 R; module update;
-      threads: 1
+      threads: 8
       sample_size: 200000
     sambamba:
       exe: /apps/software/dmd-2.072.1/sambamba/0.6.5/sambamba
