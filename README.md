@@ -1,6 +1,6 @@
 # CRI RNAseq 2018
 
-RNA-Seq Analysis Pipeline based on [CRI](http://cri.uchicago.edu/) HPC system
+RNA-Seq Analysis Pipeline using the [CRI](http://cri.uchicago.edu/) HPC system
 
 # CAUTION
 
@@ -9,7 +9,11 @@ RNA-Seq Analysis Pipeline based on [CRI](http://cri.uchicago.edu/) HPC system
 
 ## Dataset
 
-The RNA-seq data used in this tutorial are from the project DLBC.
+The RNA-seq data used in this tutorial are from a [published paper](https://www.ncbi.nlm.nih.gov/pubmed/25499759) that explores PRDM11 and lymphomagenesis. We will use the data from the PRDM11 knockdown and wildtype samples. You are welcome to explore the full dataset on GEO ([GSE56065](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE56065)).
+
+>  
+> Fog et al., 2015, Loss of PRDM11 promotes MYC-driven lymphomagenesis, Blood 125:1272-1281 The Cancer Genome Atlas Research Network, 2011, Integrated genomic analyses of ovarian carcinoma, Nature, 474:609–615  
+>  
 
 ## File description
 
@@ -58,7 +62,7 @@ $ Rscript --vanilla SRC/R/util/prerequisite.packages.R
 $ bash Build_RNAseq.DLBC.sh
 
 # run the entire pipeline with just this command
-$ bash Submit_DLBC.sh
+$ bash Submit_cri_rnaseq_2018.sh
 ```
 
 ## Contributing
