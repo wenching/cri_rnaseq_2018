@@ -1301,12 +1301,7 @@ $ grep -A5 'Up/Down regulated DEGs per methods' RNAseq/LociStat/featurecounts/st
 ```
 
 ```
-## INFO [2018-11-14 10:58:17] #STAT:	 Up/Down regulated DEGs per methods
-##     edger deseq2 limma
-## -1    484    409   408
-## 0       0      0     0
-## 1     387    362   395
-## Sum   871    771   803
+## grep: result/run.lociStat.featurecounts.star.*.log: No such file or directory
 ```
 
 
