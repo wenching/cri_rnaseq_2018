@@ -41,15 +41,17 @@ This repository contains the following items:
 
 # download the package via 'git clone'
 git clone git@github.com:wenching/cri_rnaseq_2018.git
+
+
 # Or, download the latest package via 'wget'
 wget https://github.com/wenching/cri_rnaseq_2018/archive/master.tar.gz .
 
+# uncompress the tarball file, if using wget
+# tar -zxvf master.tar.gz
 
-# uncompress the tarball file
-tar -zxvf master.tar.gz
-
-# change project folder name, if using wget
+# change folder name, if using wget
 # mv cri_rnaseq_2018-master cri_rnaseq_2018
+
 
 # change working directory to the package directory
 cd cri_rnaseq_2018
