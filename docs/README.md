@@ -320,17 +320,22 @@ The login procedure varies slightly depending on whether you use a Mac/Unix/Linu
         ```bash
         $ git clone git@github.com:wenching/cri_rnaseq_2018.git
         ```
-    2. Or, copy the latest package via 'wget'
+    2. Or, download the latest package via 'wget'
         
         ```bash
-        $ wget https://github.com/wenching/cri_rnaseq_2018/archive/cri_rnaseq_2018.tar.gz .
+        $ wget https://github.com/wenching/cri_rnaseq_2018/archive/master.tar.gz .
         ```
-    3. Uncompress the tarball file
-        
-        ```bash
-        $ tar -zxvf cri_rnaseq_2018.tgz
-        ```
-    4. Change working directory to pipeline dirctory
+        1. Uncompress the tarball file
+            
+            ```bash
+            $ tar -zxvf master.tgz
+            ```
+        2. Change folder name
+            
+            ```bash
+            $ mv cri_rnaseq_2018-master cri_rnaseq_2018
+            ```
+    3. Change working directory to pipeline dirctory
         
         ```bash
         $ cd cri_rnaseq_2018
