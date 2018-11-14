@@ -5,7 +5,7 @@ RNA-Seq Analysis Pipeline using the [CRI](http://cri.uchicago.edu/) HPC system
 # CAUTION
 
 **THIS PACKAGE IS LARGE, PLEASE DO NOT DOWNLOAD IT TO YOUR HOME DIRECTORY**  
-**USE OTHER LOCATION LIKE /gpfs/data/bioinformatics/username**
+**USE OTHER LOCATION LIKE /CRI/HPC/username**
 
 ## Dataset
 
@@ -37,7 +37,7 @@ This repository contains the following items:
 # CAUTION
 
 **THIS PACKAGE IS LARGE, PLEASE DO NOT DOWNLOAD IT TO YOUR HOME DIRECTORY**  
-**USE OTHER LOCATION LIKE /gpfs/data/bioinformatics/username**
+**USE OTHER LOCATION LIKE /CRI/HPC/username**
 
 # download the package via 'git clone'
 git clone git@github.com:wenching/cri_rnaseq_2018.git
