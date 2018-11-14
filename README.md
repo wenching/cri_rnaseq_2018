@@ -2,24 +2,22 @@
 
 RNA-Seq Analysis Pipeline based on [CRI](http://cri.uchicago.edu/) HPC system
 
+# CAUTION
+
+**THIS PACKAGE IS LARGE, PLEASE DO NOT DOWNLOAD IT TO YOUR HOME DIRECTORY**  
+**USE OTHER LOCATION LIKE /gpfs/data/bioinformatics/username**
+
 ## Dataset
 
-The RNA-seq data used in this tutorial are from a [published paper](https://www.ncbi.nlm.nih.gov/pubmed/25499759) that explores *PRDM11* and lymphomagenesis.
-We will use the data from the PRDM11 knockdown and wildtype samples. You are welcome to explore the full dataset on GEO ([GSE56065](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE56065)).
-
->
-> Fog et al., 2015, Loss of PRDM11 promotes MYC-driven lymphomagenesis, Blood 125:1272-1281
-> The Cancer Genome Atlas Research Network, 2011, Integrated genomic analyses of ovarian carcinoma, Nature, 474:609–615
->
+The RNA-seq data used in this tutorial are from the project DLBC.
 
 ## File description
 
 This repository contains the following items:
-- ```docs/README.md``` - the main tutorial documentation
-- ```example/``` - example data for running this pipeline
+- ```docs/README.html``` - the main tutorial documentation
+- ```example/``` - folder accommodating all data (i.e., metadata file, configuration file, sequencing data folder, and references folder) for running this pipeline
 - ```README.md``` - this description file
-- ```references/``` - a symbolic link to the genome database within CRI HPC system used in the example dataset
-- ```SRC/``` - automatic pipelines for RNAseq analysis
+- ```SRC/``` - automatic pipelines for RNA-seq analysis
 
 ### Prerequisites
 
@@ -32,14 +30,25 @@ This repository contains the following items:
 ### Installing
 
 ```bash
-# download the package
+# CAUTION
+
+**THIS PACKAGE IS LARGE, PLEASE DO NOT DOWNLOAD IT TO YOUR HOME DIRECTORY**  
+**USE OTHER LOCATION LIKE /gpfs/data/bioinformatics/username**
+
+# download the package via 'git clone'
 git clone git@github.com:wenching/cri_rnaseq_2018.git
+# Or, download the latest package via 'wget'
+wget https://github.com/wenching/cri_rnaseq_2018/archive/cri_rnaseq_2018.tar.gz .
+
+
+# uncompress the tarball file
+tar -zxvf cri_rnaseq_2018.tar.gz
 
 # change working directory to the package directory
 cd cri_rnaseq_2018
 
 # load modules
-$ module purge;module load gcc udunits python/3.6.0 R; module update
+$ module purge;module load gcc udunits python/3.6.0 R/3.5.0; module update
 
 # This step is optional but it will install all necessary R packages ahead.
 # In case the pipeline was terminated due to the failure of R package installation later when running the pipeline.
@@ -49,7 +58,7 @@ $ Rscript --vanilla SRC/R/util/prerequisite.packages.R
 $ bash Build_RNAseq.DLBC.sh
 
 # run the entire pipeline with just this command
-$ bash example/DLBC/Submit_RNAseq.DLBC.sh
+$ bash Submit_DLBC.sh
 ```
 
 ## Contributing
@@ -75,4 +84,5 @@ This project is licensed under the [LGPLv3](https://www.gnu.org/licenses/lgpl-3.
 * Thank [Kyle Hernandez](https://github.com/kmhernan) for providing a private Git repository in the begining of this project
 * Thank [Riyue Bao](https://github.com/riyuebao) for providing tutorial dataset, figures, and the pipeline in the Perl version
 * Thank [PurpleBooth](https://gist.github.com/PurpleBooth) for providing the templates of [README.md](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) & [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426)
+
 

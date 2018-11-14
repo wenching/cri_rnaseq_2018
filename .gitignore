@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 *.log
 .DS_Store
-Submit_RNAseq.DLBC.bds.*
+Submit_*
 example/
 git_push.sh
 gitignore.txt
