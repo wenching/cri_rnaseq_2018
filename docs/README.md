@@ -114,7 +114,7 @@ This tutorial is based on CRI's high-performance computing (HPC) cluster. If you
 
 The RNA-seq data used in this tutorial are from **DLBC**.
 
-In this tutorial, we use the sequencing reads in the project DLBC in mouse as example.
+In this tutorial, we use the sequencing reads in the project DLBCL in human as example.
 The sample information are saved in the file **<span style="color:red">`DLBC.metadata.txt`</span>** (see [below](#Data)).
 
 ![Work Flow](IMG/RNAseq.workflow.png)
